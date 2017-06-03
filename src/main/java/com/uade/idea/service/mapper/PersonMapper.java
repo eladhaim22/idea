@@ -13,18 +13,16 @@ import java.util.Set;
  */
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
-
-	PersonMapper INSTANCE = Mappers.getMapper( PersonMapper.class );
 	
 	default PersonDTO personToPersonDto(Person person) {
         return new PersonDTO(person);
     }
 
-    Set<PersonDTO> personToPersonDTOs(Set<Person> person);
-
+    List<PersonDTO> personToPersonDTOs(List<Person> person);
+    
     Person personDTOToPerson(PersonDTO personDTO);
 
-    Set<Person> personDTOsToPerson(Set<PersonDTO> personDTOs);
+    List<Person> personDTOsToPerson(List<PersonDTO> personDTOs);
 
     default Person personFromId(Long id) {
         if (id == null) {

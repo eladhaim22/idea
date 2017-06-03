@@ -1,5 +1,5 @@
 CREATE TABLE Person(
-	id bigint Identity(1,1),
+	id bigint NOT NULL,
 	dtype varchar(20) NOT NULL,
 	firstname varchar(50) NOT NULL,
 	lastname varchar(50) NOT NULL,

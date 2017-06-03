@@ -15,6 +15,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.convert.Jsr310Converters.PeriodToStringConverter;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -47,14 +49,18 @@ public class ProjectDTO {
 
     private Instant lastModifiedDate;
 
+    @Autowired
+    private PersonMapper personMapper;
+    
     public ProjectDTO() {
         // Empty constructor needed for Jackson.
     }
 
     public ProjectDTO(Project project) {
-        this(project.getId(), project.getTitle(),project.getCreatedBy(),project.getCreatedDate(), 
-        	project.getLastModifiedBy(), project.getLastModifiedDate(),
-        	PersonMapper.INSTANCE.personToPersonDTOs(project.getTeam()));
+    	this(project.getId(), project.getTitle(),project.getCreatedBy(),project.getCreatedDate(), 
+        	project.getLastModifiedBy(), project.getLastModifiedDate(),null);
+    	//this.setTeam(personMapper.personToPersonDTOs(project.getTeam()));
+        
     }
     
     public ProjectDTO(Long id, String title,
@@ -105,5 +111,9 @@ public class ProjectDTO {
     public Set<PersonDTO> getTeam() {
         return team;
     }
-
+    
+    public void setTeam(Set<PersonDTO> person){
+    	this.team = person;
+    }
+    
 }

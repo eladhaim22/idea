@@ -1,22 +1,18 @@
 package com.uade.idea.domain;
 
-import com.uade.idea.config.Constants;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import java.time.Instant;
+
 
 
 
@@ -25,14 +21,19 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "person")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE) 
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+	    name="dtype",
+	    discriminatorType=DiscriminatorType.STRING)
+@DiscriminatorValue("person")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personSequence")
+    @SequenceGenerator(name = "personSequence", sequenceName = "person_seq", initialValue = 1000)
     private Long id;
 
     @NotNull
@@ -63,7 +64,7 @@ public class Person implements Serializable {
         name = "person_projects",
         joinColumns = {@JoinColumn(name = "person_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")})
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<Project> projects = new HashSet<>();
 

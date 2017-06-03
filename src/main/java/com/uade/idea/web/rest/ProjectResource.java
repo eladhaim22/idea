@@ -56,7 +56,7 @@ import java.util.*;
  * <p>Another option would be to have a specific JPA entity graph to handle this case.</p>
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/API")
 public class ProjectResource {
 
     private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
@@ -69,8 +69,9 @@ public class ProjectResource {
     	this.projectService = projectService;
     }
 
-    @PostMapping("/projects")
+    @PostMapping("/project")
     @Timed
+    @Secured(AuthoritiesConstants.USER)
     public ResponseEntity saveProject(@RequestBody ProjectDTO projectDto) throws URISyntaxException {
         log.debug("REST request to save project : {}", projectDto.getTitle());
         projectService.SaveProject(projectDto);

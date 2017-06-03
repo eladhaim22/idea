@@ -1,6 +1,6 @@
 Create Table Person_Projects(
 	person_id bigint NOT NULL,
-	project_if bigint NOT NULL
+	project_id bigint NOT NULL
 )
 
 ALTER TABLE Person_Projects 

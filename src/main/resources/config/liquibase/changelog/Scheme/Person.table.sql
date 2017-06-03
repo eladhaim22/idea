@@ -1,5 +1,5 @@
 CREATE TABLE Projects(
-	id bigint Identity(1,1),
+	id bigint NOT NULL,
 	title varchar(100) NOT NULL,
 	created_by varchar(50) NOT NULL,
 	created_date datetime NOT NULL,

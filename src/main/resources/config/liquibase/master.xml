@@ -5,13 +5,13 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <include file="classpath:config/liquibase/changelog/Scheme/Authoritis.table.sql" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/Scheme/hibernate.sequence.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scheme/create.sequences.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Person.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Projects.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Users.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Users_Authoritis.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Person_Projects.table.sql" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/Scripts/UsersAndRoles.table.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scripts/UsersAndRoles.script.sql" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
