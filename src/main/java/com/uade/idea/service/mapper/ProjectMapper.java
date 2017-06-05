@@ -13,6 +13,7 @@ import com.google.common.collect.Sets;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;

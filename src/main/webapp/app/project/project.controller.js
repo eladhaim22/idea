@@ -5,36 +5,30 @@
         .module('ideaApp')
         .controller('ProjectController', ProjectController);
 
-    ProjectController.$inject = ['$scope', 'Principal', 'LoginService', '$state','projectService'];
+    ProjectController.$inject = ['$scope', '$state','projectService'];
 
-    function ProjectController ($scope, Principal, LoginService, $state,projectService) {
+    function ProjectController ($scope,$state,projectService) {
     	var vm = this;
+    	vm.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
+    	vm.person ={};
     	vm.project = {};
     	vm.project.team = [];
-
-        vm.account = null;
-        vm.isAuthenticated = null;
-        vm.login = LoginService.open;
-        vm.register = register;
-        $scope.$on('authenticationSuccess', function() {
-            getAccount();
-        });
-
-        getAccount();
-
-        function getAccount() {
-            Principal.identity().then(function(account) {
-                vm.account = account;
-                vm.isAuthenticated = Principal.isAuthenticated;
-            });
-        }
-        function register () {
-            $state.go('register');
-        }
         
+    	function intialize(){
+    		if($state.params.id){
+    			projectService.get($state.params.id).then(function(project){
+    				vm.project = project;
+    			},function(error){
+    				
+    			});
+    		}
+    	}
+    	
         vm.addPersonToProject = function(){
-        	vm.project.team.push(angular.copy(vm.person));
-        	vm.person = {};
+        	if(vm.person.type){
+	        	vm.project.team.push(angular.copy(vm.person));
+	        	vm.person = {};
+	        }
         }
         
         vm.save = function(){
@@ -44,5 +38,7 @@
         		console.log(error);
         	});
         }
+        
+        intialize(); 
     }
 })();

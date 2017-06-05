@@ -1,0 +1,22 @@
+<div ng-cloak>
+	<table class="table table-striped">
+	  	<thead> 
+		  	<tr> 
+		  		<th>#</th> 
+		  		<th>Nombre de Proyecto</th> 
+		  		<th>Fecha de presentacion</th> 
+		  		<th>Estado</th>
+		  		<th>Opciones</th> 
+		  	</tr> 
+		 </thead>
+		 <tbody>
+		  	<tr ng-repeat="project in vm.projects">
+		  		<td>{{$index}}</td>
+		  		<td class="col-md-3">{{project.title}}</td>
+		    	<td>{{project.createdDate}}</td>
+		    	<td>{{project.state}}</td>
+		    	<td ng-click="vm.navigateToProject(project.id)">Ver Detalle</td>
+		  	</tr>
+	  	</tbody>
+	</table>
+</div>

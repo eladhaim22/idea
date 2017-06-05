@@ -42,7 +42,7 @@
 		}
 
 		function defaultBaseUrl(entityServiceDef) {
-			return "/API/" + entityServiceDef.entityName + "/";
+			return "/api/" + entityServiceDef.entityName + "/";
 		}
 
 		function defaultFill(entityPromise, entityServiceDef) {

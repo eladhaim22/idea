@@ -20,6 +20,12 @@
                         <span class="hidden-sm">Home</span>
                     </a>
                 </li>
+                <li>
+                  <a ui-sref="projects" ng-click="vm.collapseNavbar()">
+                      <span class="glyphicon glyphicon-home"></span>
+                      <span class="hidden-sm">Projectos Activos</span>
+                  </a>
+                </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
                
                 <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">

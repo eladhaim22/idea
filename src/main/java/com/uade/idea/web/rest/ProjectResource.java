@@ -56,7 +56,7 @@ import java.util.*;
  * <p>Another option would be to have a specific JPA entity graph to handle this case.</p>
  */
 @RestController
-@RequestMapping("/API")
+@RequestMapping("/api")
 public class ProjectResource {
 
     private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
@@ -79,13 +79,21 @@ public class ProjectResource {
                 .headers(HeaderUtil.createAlert( "el projecto se creo",null)).build();
     }
     
-    @GetMapping("/projects")
+    @GetMapping("/project")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity getAll() throws URISyntaxException{
         log.debug("REST request all projects : {}");
         Set<ProjectDTO> projects = projectService.GetAll();
-        return ResponseEntity.created(new URI("/api/projects/")).body(projects);
+        return new ResponseEntity<>(projects, null, HttpStatus.OK);
+    }
     
+    @GetMapping("/project/{id}")
+    @Timed
+    public ResponseEntity getById(@PathVariable("id") String id) throws URISyntaxException{
+        log.debug("REST request project with id  : {}", id);
+        ProjectDTO projectDTO = projectService.GetById(Long.parseLong(id));
+        return new ResponseEntity<>(projectDTO, null, HttpStatus.OK);
     }
 
 }
