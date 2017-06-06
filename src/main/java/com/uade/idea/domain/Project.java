@@ -19,8 +19,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "projectSequence")
-    @SequenceGenerator(name = "projectSequence", sequenceName = "project_seq", initialValue = 1000)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
         
     @Column(name = "title")

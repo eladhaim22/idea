@@ -36,7 +36,7 @@ spring:
                 prepStmtCacheSqlLimit: 2048
                 useServerPrepStmts: true
     jpa:
-        database-platform: org.hibernate.dialect.SQLServer2012Dialect
+        database-platform: org.hibernate.dialect.SQLServer2008Dialect
         database: SQL_SERVER
         show-sql: true
         properties:

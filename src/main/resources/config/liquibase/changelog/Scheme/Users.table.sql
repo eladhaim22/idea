@@ -1,5 +1,5 @@
 Create Table Users(
-	id bigint NOT NULL,
+	id bigint Identity(1,1),
 	login varchar(50) UNIQUE NOT NULL,
 	password_hash varchar(60),
 	first_name varchar(50),

@@ -1,9 +1,8 @@
 (function() {
     'use strict';
 
-    angular
-        .module('ideaApp')
-        .config(stateConfig);
+    angular.module('ideaApp')
+    .config(stateConfig);
 
     stateConfig.$inject = ['$stateProvider'];
 
