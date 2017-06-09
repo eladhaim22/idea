@@ -35,6 +35,10 @@ import java.util.stream.Collectors;
  */
 public class ProjectDTO {
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	private Long id;
 	        
 	private String title;
@@ -49,31 +53,15 @@ public class ProjectDTO {
 
     private Instant lastModifiedDate;
 
-    @Autowired
+    private Set<Long> usersIds;
+
+    private Set<StateDTO> states;
+    
+	@Autowired
     private PersonMapper personMapper;
     
     public ProjectDTO() {
         // Empty constructor needed for Jackson.
-    }
-
-    public ProjectDTO(Project project) {
-    	this(project.getId(), project.getTitle(),project.getCreatedBy(),project.getCreatedDate(), 
-        	project.getLastModifiedBy(), project.getLastModifiedDate(),null);
-    	//this.setTeam(personMapper.personToPersonDTOs(project.getTeam()));
-        
-    }
-    
-    public ProjectDTO(Long id, String title,
-        String createdBy, Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
-        Set<PersonDTO> team) {
-
-        this.id = id;
-        this.title = title;
-        this.createdBy = createdBy;
-        this.createdDate = createdDate;
-        this.lastModifiedBy = lastModifiedBy;
-        this.lastModifiedDate = lastModifiedDate;
-        this.team = team;
     }
 
     public Long getId() {
@@ -116,4 +104,20 @@ public class ProjectDTO {
     	this.team = person;
     }
     
+    public Set<Long> getUsersIds() {
+		return usersIds;
+	}
+
+	public void setUsersIds(Set<Long> usersIds) {
+		this.usersIds = usersIds;
+	}
+
+	public Set<StateDTO> getStates() {
+		return states;
+	}
+
+	public void setStates(Set<StateDTO> states) {
+		this.states = states;
+	}
+	
 }

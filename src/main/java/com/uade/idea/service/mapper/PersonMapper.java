@@ -1,4 +1,4 @@
-package com.uade.idea.service.mapper;
+ package com.uade.idea.service.mapper;
 
 import com.uade.idea.domain.Person;
 import com.uade.idea.domain.PersonUade;
@@ -7,6 +7,7 @@ import com.uade.idea.service.dto.PersonUadeDTO;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -14,14 +15,10 @@ import java.util.Set;
 /**
  * Mapper for the entity User and its DTO UserDTO.
  */
-@Mapper(componentModel = "spring")
-public abstract class PersonMapper {
-	
-	public abstract PersonDTO personToPersonDto(Person person);
-
-    public abstract List<PersonDTO> personToPersonDTOs(List<Person> person);
-    
-    public Person personDTOToPerson(PersonDTO personDTO){
+@Component
+public class PersonMapper {
+	    
+    public Person ToModel(PersonDTO personDTO){
     	if(personDTO instanceof PersonUadeDTO){
     		PersonUade personUade = new PersonUade();
     		personUade.setId( personDTO.getId() );
@@ -49,14 +46,31 @@ public abstract class PersonMapper {
     	}
     }
     
-    public abstract List<Person> personDTOsToPerson(List<PersonDTO> personDTOs);
-
-    public Person personFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Person person = new Person();
-        person.setId(id);
-        return person;
+    public PersonDTO ToDTO(Person person){
+    	if(person instanceof PersonUade){
+    		PersonUadeDTO personUadeDTO = new PersonUadeDTO();
+    		personUadeDTO.setId( person.getId() );
+	        personUadeDTO.setFirstName( person.getFirstName() );
+	        personUadeDTO.setLastName( person.getLastName() );
+	        personUadeDTO.setEmail( person.getEmail() );
+	        personUadeDTO.setPhoneNumber( person.getPhoneNumber() );
+	        personUadeDTO.setDni( person.getDni() );
+	        personUadeDTO.setAge( person.getAge() );
+    		personUadeDTO.setFileNumber(((PersonUade) person).getFileNumber());
+			personUadeDTO.setCareer(((PersonUade) person).getCareer());
+			personUadeDTO.setStage(((PersonUade) person).getStage());
+	        return personUadeDTO;
+    	}
+    	else{
+    		PersonDTO personDTO = new PersonDTO();
+	        personDTO.setId( person.getId() );
+	        personDTO.setFirstName( person.getFirstName() );
+	        personDTO.setLastName( person.getLastName() );
+	        personDTO.setEmail( person.getEmail() );
+	        personDTO.setPhoneNumber( person.getPhoneNumber() );
+	        personDTO.setDni( person.getDni() );
+	        personDTO.setAge( person.getAge() );
+	        return personDTO;
+    	}
     }
 }

@@ -92,7 +92,7 @@ public class UserResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity createUser(@Valid @RequestBody ManagedUserVM managedUserVM) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserVM);
-
+        
         if (managedUserVM.getId() != null) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new user cannot already have an ID"))
@@ -150,12 +150,20 @@ public class UserResource {
      */
     @GetMapping("/users")
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<UserDTO>> getAllUsers(@ApiParam Pageable pageable) {
         final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
+    
+    @GetMapping("/usersByAuthority")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<List<UserDTO>> getAllUsers(Long authority) {
+        return new ResponseEntity<>(userService.findAllByAuthority(authority),HttpStatus.OK);
+    }
+    
     /**
      * @return a string list of the all of the roles
      */

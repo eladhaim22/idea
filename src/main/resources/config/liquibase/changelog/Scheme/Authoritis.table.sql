@@ -1,5 +1,5 @@
 Create Table Authorities(
-	name varchar(50) NOT NULL UNIQUE,
+	name varchar(50) NOT NULL UNIQUE
 )
 
 ALTER TABLE Authorities

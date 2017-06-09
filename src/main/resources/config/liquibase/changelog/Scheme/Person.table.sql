@@ -1,13 +1,18 @@
-CREATE TABLE Projects(
-	id bigint NOT NULL,
-	title varchar(100) NOT NULL,
-	created_by varchar(50) NOT NULL,
-	created_date datetime NOT NULL,
-	last_modified_by varchar(50),
-	last_modified_date datetime
+CREATE TABLE Person(
+	id bigint IDENTITY(1,1),
+	dtype varchar(20) NOT NULL,
+	firstname varchar(50) NOT NULL,
+	lastname varchar(50) NOT NULL,
+	dni varchar(9) NOT NULL UNIQUE,
+	age int,
+	phonenumber varchar(20),
+	email varchar(50),
+	filenumber varchar(15) NULL,
+	carrer varchar(50) NULL,
+	stage int NULL
 )
 
-ALTER TABLE Projects
-	ADD CONSTRAINT PK_Projects PRIMARY KEY (Id);
+ALTER TABLE Person
+	ADD CONSTRAINT PK_Person PRIMARY KEY (Id);
 	
 

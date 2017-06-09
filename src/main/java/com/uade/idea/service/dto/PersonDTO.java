@@ -15,7 +15,7 @@ import com.uade.idea.domain.Person;
         @JsonSubTypes.Type(value = PersonUadeDTO.class, name = "personUade")})
 public class PersonDTO {
 
-    private Long id;
+	private Long id;
 
     private String firstName;
     
@@ -31,30 +31,37 @@ public class PersonDTO {
     
     private Set<Integer> projectsIds;
 
+    public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public void setProjectsIds(Set<Integer> projectsIds) {
+		this.projectsIds = projectsIds;
+	}
+
     public PersonDTO() {
         // Empty constructor needed for Jackson.
     } 
-
-    public PersonDTO(Person person) {
-        this(person.getId(), person.getFirstName(), person.getLastName(),
-            person.getEmail(),person.getAge(),person.getDni(),person.getPhoneNumber(),
-            person.getProjects().stream().map(project -> project.getId().intValue())
-            .collect(Collectors.toSet()));
-    }
-
-    public PersonDTO(Long id, String firstName, String lastName,
-        String email,int age,String dni,String phoneNumber,Set<Integer> projectsIds) {
-
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.dni = dni;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.projectsIds = projectsIds;
-    }
-
     
     public Long getId() {
 		return id;

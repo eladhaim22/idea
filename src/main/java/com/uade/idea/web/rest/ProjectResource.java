@@ -66,16 +66,19 @@ public class ProjectResource {
 
     private final ProjectService projectService;
     
-    public ProjectResource(ProjectService projectService) {
+    private final UserService userService;
+    
+    public ProjectResource(ProjectService projectService,UserService userService) {
     	this.projectService = projectService;
+    	this.userService = userService;
     }
 
     @PostMapping("/project")
     @Timed
     @Secured(AuthoritiesConstants.USER)
-    public ResponseEntity saveProject(@RequestBody ProjectDTO projectDto) throws URISyntaxException {
+    public ResponseEntity createProject(@RequestBody ProjectDTO projectDto) throws URISyntaxException {
         log.debug("REST request to save project : {}", projectDto.getTitle());
-        projectService.SaveProject(projectDto);
+        projectService.CreateProject(projectDto);
         return ResponseEntity.created(new URI("/api/project/"))
                 .headers(HeaderUtil.createAlert( "el projecto se creo",null)).build();
     }
@@ -92,9 +95,16 @@ public class ProjectResource {
     @GetMapping("/project/{id}")
     @Timed
     public ResponseEntity getById(@PathVariable("id") String id) throws URISyntaxException{
-        log.debug("REST request project with id  : {}", id);
-        ProjectDTO projectDTO = projectService.GetById(Long.parseLong(id));
-        return new ResponseEntity<>(projectDTO, null, HttpStatus.OK);
+        try{ 
+	    	log.debug("REST request project with id  : {}", id);
+	        User user = userService.getUserWithAuthorities();
+	        
+	        ProjectDTO projectDTO = projectService.GetById(Long.parseLong(id));
+	        return new ResponseEntity<>(projectDTO,HttpStatus.OK);
+        }
+        catch(SecurityException ex){
+        	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 
 }

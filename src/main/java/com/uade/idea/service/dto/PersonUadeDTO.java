@@ -29,23 +29,6 @@ public class PersonUadeDTO extends PersonDTO{
         // Empty constructor needed for Jackson.
     } 
 
-    public PersonUadeDTO(PersonUade person) {
-        this(person.getId(), person.getFirstName(), person.getLastName(),
-            person.getEmail(),person.getAge(),person.getDni(),person.getPhoneNumber(),
-            person.getProjects().stream().map(project -> project.getId().intValue())
-            .collect(Collectors.toSet()),person.getFileNumber(),person.getCareer(),
-            person.getStage());
-    }
-
-    public PersonUadeDTO(Long id, String firstName, String lastName,
-        String email,int age,String dni,String phoneNumber,Set<Integer> projectsIds,
-        String fileNumbre,String carrer,Stage stage) {
-    	super(id, firstName, lastName, email, age, dni, phoneNumber, projectsIds);
-        this.career = carrer;
-    	this.fileNumber = fileNumbre;
-    	this.stage = stage;
-    }
-
     @JsonProperty
 	public String getFileNumber() {
 		return fileNumber;

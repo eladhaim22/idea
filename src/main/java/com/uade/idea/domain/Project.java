@@ -8,6 +8,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -35,8 +36,38 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @BatchSize(size = 20)
     private Set<Person> team;
 
+    @JsonIgnore
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(
+        name = "users_projects",
+        joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
+    //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @BatchSize(size = 20)
+    private Set<User> users = new HashSet<>();
+    
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="project_id")
+    private Set<State> states = new HashSet<>();
+    
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+
 	public Long getId() {
 		return id;
+	}
+
+	public Set<State> getStates() {
+		return states;
+	}
+
+	public void setStates(Set<State> states) {
+		this.states = states;
 	}
 
 	public void setId(Long id) {
@@ -58,6 +89,6 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	public void setTeam(Set<Person> team) {
 		this.team = team;
 	}
-    
+	
     
 }
