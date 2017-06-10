@@ -47,7 +47,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     private Set<User> users = new HashSet<>();
     
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="project_id")
+    @JoinColumn(name="project_id", nullable=false)
     private Set<State> states = new HashSet<>();
     
 	public Set<User> getUsers() {

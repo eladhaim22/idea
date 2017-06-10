@@ -96,9 +96,7 @@ public class ProjectResource {
     @Timed
     public ResponseEntity getById(@PathVariable("id") String id) throws URISyntaxException{
         try{ 
-	    	log.debug("REST request project with id  : {}", id);
-	        User user = userService.getUserWithAuthorities();
-	        
+	    	log.debug("REST request project with id  : {}", id);	        
 	        ProjectDTO projectDTO = projectService.GetById(Long.parseLong(id));
 	        return new ResponseEntity<>(projectDTO,HttpStatus.OK);
         }
@@ -106,5 +104,17 @@ public class ProjectResource {
         	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
-
+    
+    @GetMapping("/projectsByAuthority")
+    @Timed
+    public getAllByAuthority() throws URISyntaxException{
+    	try{ 
+	    	log.debug("REST request project by authority");
+	    	Set<ProjectDTO> projects = projectService.projectsByAuthority();
+	    	return new ResponseEntity<>(projects, null, HttpStatus.OK);
+    	} 
+	    catch(SecurityException ex){
+         	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+         }
+    }
 }

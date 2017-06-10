@@ -12,7 +12,7 @@ CREATE TABLE States(
 ALTER TABLE States
 	ADD CONSTRAINT PK_States PRIMARY KEY (Id);
 	
-ALTER TABLE States 
+ALTER TABLE States
 	ADD CONSTRAINT FK_States_Projects FOREIGN KEY (project_id) REFERENCES Projects(Id);
 
 

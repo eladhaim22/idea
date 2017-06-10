@@ -94,4 +94,27 @@ public class ProjectService {
     	}
     	throw new SecurityException("The user can't get this project");	
     }
+    
+    
+    public Set<ProjectDTO> projectsByAuthority(){
+    	User user = userService.getUserWithAuthorities();
+    	Project project = projectRepository.
+    	if(user.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.ADMIN))){
+    		log.debug("Getting project with id:" + id);
+    		return projectMapper.ToDTO(project);
+    	}
+    	else {
+    		if(user.getAuthorities().stream().anyMatch(authoritiy -> authoritiy.getName().toString() == AuthoritiesConstants.REFERRE.toString()) &&
+    				project.getUsers().stream().anyMatch(u -> u.getId() == user.getId())){
+    			log.debug("Getting project with id:" + id);
+    			return projectMapper.ToDTO(project);
+    		}
+    		else { 
+    			if(project.getCreatedBy() == user.getLogin()){
+    				return projectMapper.ToDTO(project);
+    			}
+    		}
+    	}
+    	throw new SecurityException("The user can't get this project");	
+    }
 }
