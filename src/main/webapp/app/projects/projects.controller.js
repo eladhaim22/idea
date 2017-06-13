@@ -12,19 +12,8 @@
     	
     	function intialize(){
     		Principal.identity().then(function(identity){
-    		if(_.contains(identity.authorities,"ROLE_ADMIN")){
-    			var promise = projectService.getAll();
-    		}
-    		else{
-    			if(_.contains(identity.authorities,"ROLE_REFERRE")){
-    				var promise = projectService.getByReferre();
-    			}
-    			else
-    				{
-    					var promise = projectService.getByUser();
-    				}
-    		}
-    		promise.then(function(projects){
+    		
+    		projectService.getAll().then(function(projects){
     			vm.projects = projects;
     		},function(error){
     			

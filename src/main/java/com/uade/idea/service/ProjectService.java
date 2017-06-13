@@ -66,6 +66,12 @@ public class ProjectService {
     	projectRepository.save(project);
     }
     
+    public void SaveProject(ProjectDTO projectDTO){
+    	log.debug("Saving project:", projectDTO.getTitle());
+    	Project project = projectMapper.ToModel(projectDTO);
+    	projectRepository.save(project);
+    }
+    
     
     public Set<ProjectDTO> GetAll(){
     	log.debug("Getting all projects");
@@ -96,25 +102,14 @@ public class ProjectService {
     }
     
     
-    public Set<ProjectDTO> projectsByAuthority(){
+    public Set<ProjectDTO> projectsByUser(){
     	User user = userService.getUserWithAuthorities();
-    	Project project = projectRepository.
     	if(user.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.ADMIN))){
-    		log.debug("Getting project with id:" + id);
-    		return projectMapper.ToDTO(project);
+    		log.debug("Getting all projects for {0}:",user.getLogin());
+    		return Sets.newHashSet(projectRepository.findAll()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet());
     	}
     	else {
-    		if(user.getAuthorities().stream().anyMatch(authoritiy -> authoritiy.getName().toString() == AuthoritiesConstants.REFERRE.toString()) &&
-    				project.getUsers().stream().anyMatch(u -> u.getId() == user.getId())){
-    			log.debug("Getting project with id:" + id);
-    			return projectMapper.ToDTO(project);
-    		}
-    		else { 
-    			if(project.getCreatedBy() == user.getLogin()){
-    				return projectMapper.ToDTO(project);
-    			}
-    		}
+    		return Sets.newConcurrentHashSet(projectRepository.findByUserId(user.getId()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet()));
     	}
-    	throw new SecurityException("The user can't get this project");	
     }
 }

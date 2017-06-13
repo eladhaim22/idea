@@ -34,7 +34,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "person_id", referencedColumnName = "id")})
     //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
-    private Set<Person> team;
+    private Set<Person> team = new HashSet<>();;
 
     @JsonIgnore
     @ManyToMany(cascade=CascadeType.ALL)

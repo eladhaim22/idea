@@ -13,22 +13,38 @@
     	vm.person ={};
     	vm.project = {};
     	vm.project.team = [];
-        
+        vm.edit = $state.params.id ? true : false;
+    	
+    	
     	function intialize(){
     		if($state.params.id){
     			projectService.get($state.params.id).then(function(project){
     				vm.project = project;
+    				vm.projectState = _.find(project.states, function(state){ return state.active === true });
     			},function(error){
     				
     			});
     		}
     	}
     	
+    	vm.changeState = function (){
+    		projectService.changeState(vm.project.id).then(function(success){
+    			$state.reload();
+    		},function(error){
+    			
+    		});
+    	}
+    	
         vm.addPersonToProject = function(){
         	if(vm.person.type){
 	        	vm.project.team.push(angular.copy(vm.person));
 	        	vm.person = {};
+	        	vm.personType = undefined;
 	        }
+        }
+        
+        vm.deletePersonFromProject = function(index){
+        	vm.project.team.splice(index);
         }
         
         vm.save = function(){

@@ -1,33 +1,22 @@
 package com.uade.idea.web.rest;
 
-import com.uade.idea.config.Constants;
 import com.codahale.metrics.annotation.Timed;
-import com.uade.idea.domain.User;
-import com.uade.idea.repository.UserRepository;
+import com.uade.idea.domain.Status;
 import com.uade.idea.security.AuthoritiesConstants;
-import com.uade.idea.service.MailService;
 import com.uade.idea.service.ProjectService;
 import com.uade.idea.service.UserService;
 import com.uade.idea.service.dto.ProjectDTO;
-import com.uade.idea.service.dto.UserDTO;
-import com.uade.idea.web.rest.vm.ManagedUserVM;
+import com.uade.idea.service.dto.StateDTO;
 import com.uade.idea.web.rest.util.HeaderUtil;
-import com.uade.idea.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.ApiParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -57,7 +46,7 @@ import java.util.*;
  * <p>Another option would be to have a specific JPA entity graph to handle this case.</p>
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/project")
 public class ProjectResource {
 
     private final Logger log = LoggerFactory.getLogger(ProjectResource.class);
@@ -73,7 +62,7 @@ public class ProjectResource {
     	this.userService = userService;
     }
 
-    @PostMapping("/project")
+    @PostMapping("")
     @Timed
     @Secured(AuthoritiesConstants.USER)
     public ResponseEntity createProject(@RequestBody ProjectDTO projectDto) throws URISyntaxException {
@@ -83,16 +72,25 @@ public class ProjectResource {
                 .headers(HeaderUtil.createAlert( "el projecto se creo",null)).build();
     }
     
-    @GetMapping("/project")
+    @PostMapping("/changeState")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity getAll() throws URISyntaxException{
-        log.debug("REST request all projects : {}");
-        Set<ProjectDTO> projects = projectService.GetAll();
-        return new ResponseEntity<>(projects, null, HttpStatus.OK);
+    public ResponseEntity changeState(@RequestBody int projectId) throws URISyntaxException {
+        log.debug("REST request to change project {0} to state {1}", projectId);
+        ProjectDTO projectDto = projectService.GetById(projectId);
+        if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial)){
+        	projectDto.getStates().stream().forEach(projectState -> projectState.setActive(false));
+        	StateDTO s = new StateDTO();
+        	s.setActive(true);
+        	s.setStatus(Status.PreSelected);
+        	projectDto.getStates().add(s);
+        }
+        projectService.SaveProject(projectDto);
+        return ResponseEntity.created(new URI("/api/project/"))
+                .headers(HeaderUtil.createAlert( "el projecto esta preseleccionado",null)).build();
     }
     
-    @GetMapping("/project/{id}")
+    @GetMapping("/{id}")
     @Timed
     public ResponseEntity getById(@PathVariable("id") String id) throws URISyntaxException{
         try{ 
@@ -105,16 +103,19 @@ public class ProjectResource {
         }
     }
     
-    @GetMapping("/projectsByAuthority")
+    @GetMapping("")
     @Timed
-    public getAllByAuthority() throws URISyntaxException{
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity getAllByAuthority() throws URISyntaxException{
     	try{ 
 	    	log.debug("REST request project by authority");
-	    	Set<ProjectDTO> projects = projectService.projectsByAuthority();
+	    	Set<ProjectDTO> projects = projectService.projectsByUser();
 	    	return new ResponseEntity<>(projects, null, HttpStatus.OK);
     	} 
 	    catch(SecurityException ex){
          	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
          }
     }
+    
+    
 }

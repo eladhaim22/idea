@@ -2,51 +2,118 @@
     <div class="row">
     	<form>
     		<div class="form-group">
-    			<input type="text" class="form-control" placeholder="Ingrese el titulo" ng-model="vm.project.title">
+    			<input type="text" class="form-control" placeholder="Ingrese el titulo" ng-model="vm.project.title" ng-disabled="vm.edit">
     		</div>
     		<div class="form-group">
-    			<input type="radio" name="Type" value="uade" ng-model="person.type" ng-change="vm.person.type = 'personUade'">Uade<br>
-  				<input type="radio" name="Type" value="extern" ng-model="person.type" ng-change="vm.person.type = 'person'">Externo<br>
-    			<input type="text" class="form-control" placeholder="Nombre" ng-model="vm.person.firstName">
-    			<input type="text" class="form-control" placeholder="Apellido"ng-model="vm.person.lastName">
-    			<input type="text" class="form-control" placeholder="DNI" ng-model="vm.person.dni">
-    			<input type="text" class="form-control" placeholder="Eded" ng-model="vm.person.age">
-    			<input type="text" class="form-control" placeholder="Telefono" ng-model="vm.person.phoneNumber">
-    			<input type="text" class="form-control" placeholder="Email" ng-model="vm.person.email">
-    		</div>
-    		<div class="form-group" ng-if="vm.person.type === 'personUade'">
-    			<input type="text" class="form-control" placeholder="Carrera" ng-model="vm.person.career">
-    		</div>
-    		<div class="form-group" ng-if="vm.person.type=== 'personUade'">
     			<div class="row">
-	    			<div class="col-md-6">
+    				<div class="col-md-2">
+    					<input type="radio" name="Type" value="uade" ng-model="vm.personType" ng-change="vm.person.type = 'personUade'"  ng-disabled="vm.edit">Uade<br>
+  					</div>
+  					<div class="col-md-2">
+  						<input type="radio" name="Type" value="extern" ng-model="vm.personType" ng-change="vm.person.type = 'person'"  ng-disabled="vm.edit">Externo<br>
+    				</div>
+    			</div>
+    		</div>	
+    		<div class="form-group" ng-if="!vm.edit">	
+    			<div class="row">
+	    			<div class="col-md-4">
+	    				<input type="text" class="form-control" placeholder="Nombre" ng-model="vm.person.firstName" >
+	    			</div>
+	    			<div class="col-md-4">
+	    				<input type="text" class="form-control" placeholder="Apellido"ng-model="vm.person.lastName">
+	    			</div>
+	    			<div class="col-md-3">
+	    				<input type="text" class="form-control" placeholder="DNI" ng-model="vm.person.dni">
+	    			</div>
+    			</div>
+    		</div>
+    		<div class="form-group" ng-if="!vm.edit && vm.person.type === 'personUade'">	
+    			<div class="row">
+	    			<div class="col-md-4">
+	    				<input type="text" class="form-control" placeholder="Carrera" ng-model="vm.person.career">
+	    			</div>
+	    			<div class="col-md-4">
 	    				<input type="text" class="form-control" placeholder="FileNumber" ng-model="vm.person.fileNumber">
 	    			</div>
-	    			<div class="col-md-6">
-		    			<select class="form-control col-md-6" ng-model="vm.person.stage" name="stageSelect">
+	    			<div class="col-md-3">
+	    			<select class="form-control col-md-6" ng-model="vm.person.stage" name="stageSelect">
 		    				<option value="">Elija etapa</option>
 		    				<option ng-repeat="stage in vm.stages" value="{{$index}}">{{stage}}<option>
 		    			</select>
 	    			</div>
     			</div>
-    			<button type="button" ng-click="vm.addPersonToProject()">+</button>
     		</div>
+    		<div class="form-group" ng-if="!vm.edit">	
+    			<div class="row">
+	    			<div class="col-md-4">
+	    				<input type="text" class="form-control" placeholder="Eded" ng-model="vm.person.age">
+	    			</div>
+	    			<div class="col-md-4">
+	    				<input type="text" class="form-control" placeholder="Telefono" ng-model="vm.person.phoneNumber">
+	    			</div>
+	    			<div class="col-md-3">
+	    				<input type="text" class="form-control" placeholder="Email" ng-model="vm.person.email">	
+	    			</div>
+	    			<div>
+	    				<button class="btn btn-primary" type="button" ng-if="!vm.edit" ng-click="vm.addPersonToProject()"><i class="glyphicon glyphicon-plus"></i></button>
+	    			</div>
+    			</div>
     		</div>
-    		<div ng-repeat="p in vm.project.team" class="form-group">
-    			<input type="text" class="form-control" ng-model="p.firstName">
-    			<input type="text" class="form-control" ng-model="p.lastName">
-    			<input type="text" class="form-control" ng-model="p.dni">
-    			<input type="text" class="form-control" ng-model="p.age">
-    			<input type="text" class="form-control" ng-model="p.phoneNumber">
-    			<input type="text" class="form-control" ng-model="p.email">
-    			<div ng-if="p.type === 'personUade'">
-	    			<input type="text" class="form-control" placeholder="Carrera" ng-model="p.career">
-	    			<input type="text" class="form-control" placeholder="FileNumber" ng-model="p.fileNumber">
-	    			<input type="text" class="form-control" placeholder="Stage" ng-model="vm.stages[p.peson.stage]">
- 				</div>   		
+    		<div ng-if="vm.project.team.length > 0">
+    			<h2>Grupo</h2>
+	    		<div ng-repeat="p in vm.project.team" class="team-part">
+	    			<div class="form-group">	
+	    			<div class="row">
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="Nombre" ng-model="p.firstName" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="Apellido"ng-model="p.lastName" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-3">
+		    				<input type="text" class="form-control" placeholder="DNI" ng-model="p.dni" ng-disabled="vm.edit">
+		    			</div>
+	    			</div>
+	    		</div>
+	    		<div class="form-group" ng-if="p.type === 'personUade'">	
+	    			<div class="row">
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="Carrera" ng-model="p.career" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="FileNumber" ng-model="p.fileNumber" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-3">
+		    			<select class="form-control col-md-6" ng-model="p.stage" name="stageSelect" ng-disabled="vm.edit">
+			    				<option value="">Elija etapa</option>
+			    				<option ng-repeat="stage in vm.stages" value="{{$index}}">{{stage}}<option>
+			    			</select>
+		    			</div>
+	    			</div>
+	    		</div>
+	    		<div class="form-group">	
+	    			<div class="row">
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="Eded" ng-model="p.age" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-4">
+		    				<input type="text" class="form-control" placeholder="Telefono" ng-model="p.phoneNumber" ng-disabled="vm.edit">
+		    			</div>
+		    			<div class="col-md-3">
+		    				<input type="text" class="form-control" placeholder="Email" ng-model="p.email" ng-disabled="vm.edit">	
+		    			</div>
+		    			<div>
+		    				<button class="btn btn-primary" ng-if="!vm.edit" type="button" ng-click="vm.deletePersonFromProject($index)"><i class="glyphicon glyphicon-minus"></i></button>
+		    			</div>
+	    			</div>
+	    		</div>   		
+	    		</div>
     		</div>
-    		<div>
-    			<button type="button" ng-click="vm.save()">guardar</button>
+    		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
+    			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Posutlar</button>
+    		</div>
+    		<div ng-if="vm.edit && vm.projectState.status == 'Initial'" style="margin-top:10px;" class="pull-right">
+    			<button type="button"  class="btn btn-success" ng-click="vm.changeState()">Pre-Seleccionar</button>
     		</div>
     	</form>
     </div>

@@ -325,6 +325,11 @@ ui bootstrap tweaks
     outline: none;
 }
 
-
+.team-part{
+	border:solid 1px;
+	color:buttonface;
+	padding:10px;
+	margin-top: 5px;
+}
 
 /* jhipster-needle-css-add-main JHipster will add new css style */
