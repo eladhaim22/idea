@@ -60,7 +60,7 @@
     <script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.js"></script>
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
+     <script src="bower_components/underscore/underscore.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 
@@ -68,8 +68,11 @@
     <!-- inject:js -->
     <script src="app/app.module.js"></script>
     <script src="app/services/user/user.service.js"></script>
+    <script src="app/services/restService.service.js"></script>
+    <script src="app/services/projectService.service.js"></script>
     <script src="app/services/profiles/profile.service.js"></script>
     <script src="app/services/profiles/page-ribbon.directive.js"></script>
+    <script src="app/services/entityServiceFactory.service.js"></script>
     <script src="app/services/auth/sessions.service.js"></script>
     <script src="app/services/auth/register.service.js"></script>
     <script src="app/services/auth/principal.service.js"></script>
@@ -82,14 +85,14 @@
     <script src="app/services/auth/auth.service.js"></script>
     <script src="app/services/auth/activate.service.js"></script>
     <script src="app/services/auth/account.service.js"></script>
+    <script src="app/projects/projects.state.js"></script>
+    <script src="app/projects/projects.controller.js"></script>
+    <script src="app/project/project.state.js"></script>
+    <script src="app/project/project.controller.js"></script>
     <script src="app/layouts/navbar/navbar.controller.js"></script>
     <script src="app/layouts/error/error.state.js"></script>
     <script src="app/home/home.state.js"></script>
     <script src="app/home/home.controller.js"></script>
-    <script src="app/project/project.state.js"></script>
-    <script src="app/project/project.controller.js"></script>
-    <script src="app/projects/projects.state.js"></script>
-    <script src="app/projects/projects.controller.js"></script>
     <script src="app/components/util/truncate-words.filter.js"></script>
     <script src="app/components/util/truncate-characters.filter.js"></script>
     <script src="app/components/util/sort-by.directive.js"></script>
@@ -122,8 +125,6 @@
     <script src="app/blocks/config/alert.config.js"></script>
     <script src="app/app.state.js"></script>
     <script src="app/app.constants.js"></script>
-    <script src="app/account/settings/settings.state.js"></script>
-    <script src="app/account/settings/settings.controller.js"></script>
     <script src="app/admin/user-management/user-management-dialog.controller.js"></script>
     <script src="app/admin/user-management/user-management-detail.controller.js"></script>
     <script src="app/admin/user-management/user-management-delete-dialog.controller.js"></script>
@@ -133,6 +134,8 @@
     <script src="app/admin/logs/logs.service.js"></script>
     <script src="app/admin/logs/logs.controller.js"></script>
     <script src="app/admin/admin.state.js"></script>
+    <script src="app/account/settings/settings.state.js"></script>
+    <script src="app/account/settings/settings.controller.js"></script>
     <script src="app/account/reset/request/reset.request.state.js"></script>
     <script src="app/account/reset/request/reset.request.controller.js"></script>
     <script src="app/account/reset/finish/reset.finish.state.js"></script>
@@ -145,12 +148,6 @@
     <script src="app/account/activate/activate.state.js"></script>
     <script src="app/account/activate/activate.controller.js"></script>
     <script src="app/account/account.state.js"></script>
-    
-    <script src="app/services/restService.service.js"></script>
-    <script src="app/services/entityServiceFactory.service.js"></script>
-    <script src="app/services/projectService.service.js"></script>
-    
-    
     <!-- endinject -->
     <!-- endbuild -->
 

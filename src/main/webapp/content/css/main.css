@@ -332,4 +332,9 @@ ui bootstrap tweaks
 	margin-top: 5px;
 }
 
+.list--group-scroll{
+	max-height: 300px;
+    overflow-y: auto;
+}
+
 /* jhipster-needle-css-add-main JHipster will add new css style */

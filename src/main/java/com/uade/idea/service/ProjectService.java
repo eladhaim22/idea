@@ -5,15 +5,18 @@ import com.uade.idea.domain.Authority;
 import com.uade.idea.domain.Project;
 import com.uade.idea.domain.Status;
 import com.uade.idea.domain.User;
+import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.repository.ProjectRepository;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.StateDTO;
+import com.uade.idea.service.mapper.PersonMapper;
 import com.uade.idea.service.mapper.ProjectMapper;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.mapstruct.factory.Mappers;
@@ -44,13 +47,9 @@ public class ProjectService {
     @Autowired
     private UserService userService;
     
-   
-    /*public ProjectService(ProjectRepository projectRepository,UserService userService,ProjectMapper projectMapper) {
-        this.projectRepository = projectRepository;
-        this.userService = userService;
-        this.projectMapper = projectMapper;
-    }*/
-    
+    @Autowired 
+    private PersonService personService;
+ 
     public void CreateProject(ProjectDTO projectDTO){
     	log.debug("Saving project:", projectDTO.getTitle());
     	Set<Long> usersIds = new HashSet<Long>();
@@ -63,12 +62,14 @@ public class ProjectService {
     	states.add(stateDto);
     	projectDTO.setStates(states);
     	Project project = projectMapper.ToModel(projectDTO);
+    	project.setTeam(personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet()));
     	projectRepository.save(project);
     }
     
     public void SaveProject(ProjectDTO projectDTO){
     	log.debug("Saving project:", projectDTO.getTitle());
     	Project project = projectMapper.ToModel(projectDTO);
+    	project.setTeam(personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet()));
     	projectRepository.save(project);
     }
     

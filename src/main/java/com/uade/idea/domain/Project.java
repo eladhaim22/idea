@@ -37,7 +37,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     private Set<Person> team = new HashSet<>();;
 
     @JsonIgnore
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
         name = "users_projects",
         joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")},

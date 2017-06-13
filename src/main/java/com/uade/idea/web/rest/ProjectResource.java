@@ -6,7 +6,9 @@ import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.ProjectService;
 import com.uade.idea.service.UserService;
 import com.uade.idea.service.dto.ProjectDTO;
+import com.uade.idea.service.dto.ProjectIdAndListOfReferres;
 import com.uade.idea.service.dto.StateDTO;
+import com.uade.idea.service.dto.UserDTO;
 import com.uade.idea.web.rest.util.HeaderUtil;
 
 import org.slf4j.Logger;
@@ -17,9 +19,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import javax.websocket.MessageHandler.Partial;
 
 /**
  * REST controller for managing users.
@@ -75,17 +81,18 @@ public class ProjectResource {
     @PostMapping("/changeState")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity changeState(@RequestBody int projectId) throws URISyntaxException {
-        log.debug("REST request to change project {0} to state {1}", projectId);
-        ProjectDTO projectDto = projectService.GetById(projectId);
+    public ResponseEntity changeState(@RequestBody ProjectIdAndListOfReferres projectIdAndListOfUsers) throws URISyntaxException {
+        log.debug("REST request to change project {0} to state {1}", projectIdAndListOfUsers.getProjectId());
+        ProjectDTO projectDto = projectService.GetById(projectIdAndListOfUsers.getProjectId());
         if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial)){
         	projectDto.getStates().stream().forEach(projectState -> projectState.setActive(false));
         	StateDTO s = new StateDTO();
         	s.setActive(true);
         	s.setStatus(Status.PreSelected);
         	projectDto.getStates().add(s);
+        	projectDto.setUsersIds(projectIdAndListOfUsers.getUsers());
+        	projectService.SaveProject(projectDto);
         }
-        projectService.SaveProject(projectDto);
         return ResponseEntity.created(new URI("/api/project/"))
                 .headers(HeaderUtil.createAlert( "el projecto esta preseleccionado",null)).build();
     }
@@ -103,6 +110,18 @@ public class ProjectResource {
         }
     }
     
+    @PostMapping("/assignReferres")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity assignReferre(@RequestBody ProjectIdAndListOfReferres projectIdAndListOfUsers) throws URISyntaxException {
+    	log.debug("REST request to assign referres to project id : {0}", projectIdAndListOfUsers.getProjectId());
+        ProjectDTO projectDto = projectService.GetById(projectIdAndListOfUsers.getProjectId());
+        projectDto.setUsersIds(projectIdAndListOfUsers.getUsers());
+        projectService.SaveProject(projectDto);
+        return ResponseEntity.created(new URI("/api/project/"))
+                .headers(HeaderUtil.createAlert( "el projecto esta preseleccionado",null)).build();
+    }
+    
     @GetMapping("")
     @Timed
     @PreAuthorize("isAuthenticated()")
@@ -115,7 +134,5 @@ public class ProjectResource {
 	    catch(SecurityException ex){
          	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
          }
-    }
-    
-    
+    } 
 }
