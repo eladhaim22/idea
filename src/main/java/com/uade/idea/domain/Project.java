@@ -50,8 +50,21 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     @JoinColumn(name="project_id", nullable=false)
     private Set<State> states = new HashSet<>();
     
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="project_id", nullable=false)
+    private Set<Answer> answers = new HashSet<>();
+    
+    @OneToMany
 	public Set<User> getUsers() {
 		return users;
+	}
+
+	public Set<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(Set<Answer> answers) {
+		this.answers = answers;
 	}
 
 	public void setUsers(Set<User> users) {
@@ -90,5 +103,4 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		this.team = team;
 	}
 	
-    
 }

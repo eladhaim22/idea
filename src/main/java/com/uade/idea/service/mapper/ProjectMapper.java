@@ -39,6 +39,9 @@ public class ProjectMapper {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired 
+	private AnswerMapper answerMapper;
+	
 	public ProjectDTO ToDTO(Project source){
 		ProjectDTO projectDto = new ProjectDTO();
 		projectDto.setId(source.getId());
@@ -47,6 +50,7 @@ public class ProjectMapper {
 		projectDto.setTeam(source.getTeam().stream().map(person -> personMapper.ToDTO(person)).collect(Collectors.toSet()));
 		projectDto.setUsersIds(source.getUsers().stream().map(user -> user.getId()).collect(Collectors.toSet()));
 		projectDto.setStates(source.getStates().stream().map(state -> StateToDto(state)).collect(Collectors.toSet()));
+		projectDto.setAnsewrs(projectDto.getAnswers());
 		return projectDto;
 	}
 	
@@ -58,6 +62,7 @@ public class ProjectMapper {
 		project.setUsers(Sets.newHashSet(userRepository.findByIdIn(source.getUsersIds().stream().collect(Collectors.toList()))));
 		project.setTitle(source.getTitle());
 		project.setStates(source.getStates().stream().map(state -> StateToModel(state)).collect(Collectors.toSet()));
+		project.setAnswers(source.getAnswers().stream().map(answerDto -> answerMapper.ToModel(answerDto)).collect(Collectors.toSet()));
 		return project;
 	}
 	

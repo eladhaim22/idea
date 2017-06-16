@@ -55,7 +55,9 @@ public class ProjectDTO {
 
     private Set<Long> usersIds;
 
-    private Set<StateDTO> states;
+	private Set<StateDTO> states;
+    
+    private Set<AnswerDTO> answers;
     
 	@Autowired
     private PersonMapper personMapper;
@@ -118,6 +120,14 @@ public class ProjectDTO {
 
 	public void setStates(Set<StateDTO> states) {
 		this.states = states;
+	}
+	
+    public Set<AnswerDTO> getAnswers() {
+		return answers;
+	}
+
+	public void setAnsewrs(Set<AnswerDTO> answers) {
+		this.answers = answers;
 	}
 	
 }

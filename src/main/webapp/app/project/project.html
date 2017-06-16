@@ -109,6 +109,19 @@
 	    		</div>   		
 	    		</div>
     		</div>
+    		<div ng-repeat="section in vm.sectionAndSubSection">
+    			<div ng-if="section[0][0].section" class="section">{{section[0][0].section}}</div>
+    			<div ng-repeat="subsection in section">
+    				<div ng-if="subsection[0].subsection" class="subsection">{{subsection[0].subsection}}</div>
+    					<div ng-repeat="question in subsection">
+    						{{question.detail}}
+    						<div class="form-group">
+    							<textarea class="form-control no-resize" ng-model="project.answers[$parent.$index * $index].questionAnswer"></textarea>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Posutlar</button>
     		</div>

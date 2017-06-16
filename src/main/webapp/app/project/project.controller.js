@@ -5,26 +5,40 @@
         .module('ideaApp')
         .controller('ProjectController', ProjectController);
 
-    ProjectController.$inject = ['$scope', '$state','projectService','User','$uibModal'];
+    ProjectController.$inject = ['$scope', '$state','projectService','User','$uibModal','templateService','$q'];
 
-    function ProjectController ($scope,$state,projectService,User,$uibModal) {
+    function ProjectController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
     	var vm = this;
     	vm.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
     	vm.person ={};
     	vm.project = {};
     	vm.project.team = [];
-        vm.edit = $state.params.id ? true : false;
+        vm.project.answers = [];
+    	vm.edit = $state.params.id ? true : false;
     	
     	
     	function intialize(){
-    		if($state.params.id){
-    			projectService.get($state.params.id).then(function(project){
-    				vm.project = project;
-    				vm.projectState = _.find(project.states, function(state){ return state.active === true });
-    			},function(error){
-    				
+    		var promises = [templateService.getByName('Formulario_Inscripcion')];
+    		if($state.params.id)
+    			promises.push(projectService.get($state.params.id));
+    		$q.all(promises).then(function(templateAndProject){
+    			if($state.params.id){
+    				vm.project = templateAndProject[1];
+    				vm.projectState = _.find(templateAndProject[1].states, function(state){ return state.active === true });
+    			}
+    			vm.template = templateAndProject[0];
+    			vm.sectionAndSubSection = [];
+    			angular.forEach(_.toArray(_.groupBy(templateAndProject[0].questions,'section')),function(value){
+    				vm.sectionAndSubSection.push(_.toArray(_.groupBy(value,'subsection')));
     			});
-    		}
+    			if(!$state.params.id){
+	    			_.each(templateAndProject[0].questions,function(question){
+						vm.project.answers.push({id:null,questionId : question.id,questionAnswer:undefined})
+					});
+    			}
+    		},function(error){
+    			
+    		});
     	}
     	
     	vm.changeState = function (){
@@ -37,6 +51,12 @@
 	        }, function () {
 	        	console.log('Modal dismissed at: ' + new Date());
 	        });
+    	}
+    	
+    	vm.getAnswerNode = function(questionId){
+    		return _.filter(vm.project.answers,function(answer){
+    			return answer.questionId = questionId;
+    		})[0].questionAnswer;
     	}
     	
         vm.addPersonToProject = function(){

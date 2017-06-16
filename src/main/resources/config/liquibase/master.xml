@@ -9,10 +9,14 @@
     <include file="classpath:config/liquibase/changelog/Scheme/Projects.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/States.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Users.table.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scheme/Templates.table.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scheme/Questions.table.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scheme/Answers.table.sql" relativeToChangelogFile="false"/>   
     <include file="classpath:config/liquibase/changelog/Scheme/Users_Projects.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Users_Authoritis.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Person_Projects.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scripts/UsersAndRoles.script.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scripts/TemplatesAndQuestions.script.sql" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

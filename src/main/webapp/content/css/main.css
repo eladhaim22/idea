@@ -337,4 +337,15 @@ ui bootstrap tweaks
     overflow-y: auto;
 }
 
+.no-resize{
+	resize:none;
+}
+
+.section{
+	font-size:18px;
+}
+
+.subsection{
+	font-size:16px;
+}
 /* jhipster-needle-css-add-main JHipster will add new css style */

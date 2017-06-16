@@ -8,4 +8,3 @@ Insert into users_authorities values ((select id from Users where login = 'admin
 ((select id from Users where login = 'admin'),'ROLE_USER')
 
 Insert into users_authorities values ((select id from Users where login = 'user'),'ROLE_USER')
-
