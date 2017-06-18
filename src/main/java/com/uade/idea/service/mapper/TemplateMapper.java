@@ -6,12 +6,14 @@ import com.uade.idea.domain.PersonUade;
 import com.uade.idea.domain.Question;
 import com.uade.idea.domain.Template;
 import com.uade.idea.domain.User;
+import com.uade.idea.repository.TemplateRepository;
 import com.uade.idea.service.dto.PersonDTO;
 import com.uade.idea.service.dto.PersonUadeDTO;
 import com.uade.idea.service.dto.QuestionDTO;
 import com.uade.idea.service.dto.TemplateDTO;
 import com.uade.idea.service.dto.UserDTO;
 import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,11 +26,23 @@ import java.util.stream.Collectors;
 @Component
 public class TemplateMapper {
 
+	@Autowired
+	private TemplateRepository templateRepository;
+	
+	@Autowired
+	private QuestionMapper questionMapper;
+	
     public Template ToModel(TemplateDTO templateDTO){
-    	Template template = new Template(); 
-    	template.setId(templateDTO.getId());
+    	Template template;
+    	if(templateDTO.getId() != null){
+    		template = templateRepository.getOne(templateDTO.getId());
+    	}
+    	else {
+    		template = new Template();
+    	}
     	template.setName(template.getName());
-    	template.setQuestions(templateDTO.getQuestions().stream().map(question -> QuestionToModel(question)).collect(Collectors.toList()));
+    	template.getQuestions().clear();
+    	template.getQuestions().addAll(templateDTO.getQuestions().stream().map(question -> questionMapper.ToModel(question)).collect(Collectors.toList()));
     	return template;
     }
     
@@ -36,25 +50,7 @@ public class TemplateMapper {
     	TemplateDTO templateDTO = new TemplateDTO();
     	templateDTO.setId(template.getId());
     	templateDTO.setName(template.getName());
-    	templateDTO.setQuestions(template.getQuestions().stream().map(question -> QuestionToDTO(question)).collect(Collectors.toList()));
+    	templateDTO.setQuestions(template.getQuestions().stream().map(question -> questionMapper.ToDTO(question)).collect(Collectors.toList()));
     	return templateDTO;
-    }
-    
-    private QuestionDTO QuestionToDTO(Question question){
-    	QuestionDTO questionDto = new QuestionDTO();
-    	questionDto.setId(question.getId());
-    	questionDto.setSection(question.getSection());
-    	questionDto.setSubsection(question.getSubsection());
-    	questionDto.setDetail(question.getDetail());
-    	return questionDto;
-    }
-    
-    private Question QuestionToModel(QuestionDTO questionDto){
-    	Question question = new Question();
-    	question.setId(questionDto.getId());
-    	question.setSection(questionDto.getSection());
-    	question.setSubsection(questionDto.getSubsection());
-    	question.setDetail(questionDto.getDetail());
-    	return question;
     }
 }

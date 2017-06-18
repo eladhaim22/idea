@@ -27,7 +27,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     private String title;
     
     @JsonIgnore
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
         name = "person_projects",
         joinColumns = {@JoinColumn(name = "project_id", referencedColumnName = "id")},
@@ -67,7 +67,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		this.answers = answers;
 	}
 
-	public void setUsers(Set<User> users) {
+	protected void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
@@ -79,11 +79,11 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		return states;
 	}
 
-	public void setStates(Set<State> states) {
+	protected void setStates(Set<State> states) {
 		this.states = states;
 	}
 
-	public void setId(Long id) {
+	protected void setId(Long id) {
 		this.id = id;
 	}
 
@@ -99,7 +99,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		return team;
 	}
 
-	public void setTeam(Set<Person> team) {
+	protected void setTeam(Set<Person> team) {
 		this.team = team;
 	}
 	

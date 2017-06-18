@@ -61,15 +61,15 @@ public class ProjectService {
     	Set<StateDTO> states = new HashSet<>();
     	states.add(stateDto);
     	projectDTO.setStates(states);
+    	personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
     	Project project = projectMapper.ToModel(projectDTO);
-    	project.setTeam(personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet()));
     	projectRepository.save(project);
     }
     
     public void SaveProject(ProjectDTO projectDTO){
     	log.debug("Saving project:", projectDTO.getTitle());
+    	personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
     	Project project = projectMapper.ToModel(projectDTO);
-    	project.setTeam(personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet()));
     	projectRepository.save(project);
     }
     
