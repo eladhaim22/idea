@@ -116,7 +116,7 @@
     					<div ng-repeat="question in subsection">
     						{{question.detail}}
     						<div class="form-group">
-    							<textarea class="form-control no-resize" ng-model="project.answers[$parent.$index * $index].questionAnswer"></textarea>
+    							<textarea ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer"></textarea>
     						</div>
     					</div>
     				</div>

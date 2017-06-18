@@ -41,6 +41,10 @@
     		});
     	}
     	
+    	 vm.calculateAnswerIndex = function(id){
+    		return _.indexOf(_.flatten(vm.sectionAndSubSection),_.findWhere(_.flatten(vm.sectionAndSubSection),{id:id}));
+    	}
+    	
     	vm.changeState = function (){
     		openModal().result.then(function (project) {
 	        	projectService.changeState(project.id,project.usersIds).then(function(data){
