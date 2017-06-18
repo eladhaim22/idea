@@ -48,7 +48,7 @@ public class Template  implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	protected void setId(Long id) {
 		this.id = id;
 	}
 
@@ -64,7 +64,7 @@ public class Template  implements Serializable {
 		return questions;
 	}
 
-	public void setQuestions(List<Question> questions) {
+	protected void setQuestions(List<Question> questions) {
 		this.questions = questions;
 	}
 }

@@ -2,11 +2,13 @@
 
 import com.uade.idea.domain.Person;
 import com.uade.idea.domain.PersonUade;
+import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.service.dto.PersonDTO;
 import com.uade.idea.service.dto.PersonUadeDTO;
 
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,33 +19,41 @@ import java.util.Set;
  */
 @Component
 public class PersonMapper {
-	    
+	
+	@Autowired
+	private PersonRepository personRepository;
+	
     public Person ToModel(PersonDTO personDTO){
-    	if(personDTO instanceof PersonUadeDTO){
-    		PersonUade personUade = new PersonUade();
-    		personUade.setId( personDTO.getId() );
-	        personUade.setFirstName( personDTO.getFirstName() );
-	        personUade.setLastName( personDTO.getLastName() );
-	        personUade.setEmail( personDTO.getEmail() );
-	        personUade.setPhoneNumber( personDTO.getPhoneNumber() );
-	        personUade.setDni( personDTO.getDni() );
-	        personUade.setAge( personDTO.getAge() );
-    		personUade.setFileNumber(((PersonUadeDTO) personDTO).getFileNumber());
-			personUade.setCareer(((PersonUadeDTO) personDTO).getCareer());
-			personUade.setStage(((PersonUadeDTO) personDTO).getStage());
-	        return personUade;
+    	Person person;
+    	if(personDTO.getId() != null){
+    		person = personRepository.getOne(personDTO.getId());
     	}
-    	else{
-    		Person person = new Person();
-	        person.setId( personDTO.getId() );
+    	else if(personDTO instanceof PersonUadeDTO){
+    		person = new PersonUade();
+    	}
+    	else {
+    		person = new Person();
+    	}
+    	if(personDTO instanceof PersonUadeDTO){
 	        person.setFirstName( personDTO.getFirstName() );
 	        person.setLastName( personDTO.getLastName() );
 	        person.setEmail( personDTO.getEmail() );
 	        person.setPhoneNumber( personDTO.getPhoneNumber() );
 	        person.setDni( personDTO.getDni() );
 	        person.setAge( personDTO.getAge() );
-	        return person;
+    		((PersonUade)person).setFileNumber(((PersonUadeDTO) personDTO).getFileNumber());
+    		((PersonUade)person).setCareer(((PersonUadeDTO) personDTO).getCareer());
+    		((PersonUade)person).setStage(((PersonUadeDTO) personDTO).getStage());
     	}
+    	else{
+	        person.setFirstName( personDTO.getFirstName() );
+	        person.setLastName( personDTO.getLastName() );
+	        person.setEmail( personDTO.getEmail() );
+	        person.setPhoneNumber( personDTO.getPhoneNumber() );
+	        person.setDni( personDTO.getDni() );
+	        person.setAge( personDTO.getAge() );
+    	}
+    	return person;
     }
     
     public PersonDTO ToDTO(Person person){

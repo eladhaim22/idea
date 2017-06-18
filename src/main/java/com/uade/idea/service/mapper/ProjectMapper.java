@@ -7,6 +7,7 @@ import com.uade.idea.domain.Project;
 import com.uade.idea.domain.State;
 import com.uade.idea.domain.User;
 import com.uade.idea.repository.PersonRepository;
+import com.uade.idea.repository.ProjectRepository;
 import com.uade.idea.repository.UserRepository;
 import com.uade.idea.service.dto.PersonDTO;
 import com.uade.idea.service.dto.ProjectDTO;
@@ -42,6 +43,37 @@ public class ProjectMapper {
 	@Autowired 
 	private AnswerMapper answerMapper;
 	
+	@Autowired 
+	private PersonRepository personRepository;
+	
+	@Autowired 
+	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private StateMapper stateMapper;
+	
+	public Project ToModel(ProjectDTO source){
+		Project project;
+		if(source.getId() != null){
+			project = projectRepository.getOne(source.getId());
+		}
+		else{
+			project = new Project();
+		}
+		
+		project.setLastModifiedDate(source.getLastModifiedDate());
+		project.getTeam().clear();
+		project.getTeam().addAll(personRepository.findByDniIn(source.getTeam().stream().map(personDto -> personDto.getDni()).collect(Collectors.toList())).stream().collect(Collectors.toSet()));
+		project.getUsers().clear();
+		project.getUsers().addAll(userRepository.findByIdIn(source.getUsersIds().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet()));
+		project.setTitle(source.getTitle());
+		project.getStates().clear();
+		project.getStates().addAll(source.getStates().stream().map(state -> stateMapper.ToModel(state)).collect(Collectors.toSet()));
+		project.getAnswers().clear();
+		project.getAnswers().addAll(source.getAnswers().stream().map(answerDto -> answerMapper.ToModel(answerDto)).collect(Collectors.toSet()));
+		return project;
+	}
+	
 	public ProjectDTO ToDTO(Project source){
 		ProjectDTO projectDto = new ProjectDTO();
 		projectDto.setId(source.getId());
@@ -49,37 +81,8 @@ public class ProjectMapper {
 		projectDto.setLastModifiedDate(source.getLastModifiedDate());
 		projectDto.setTeam(source.getTeam().stream().map(person -> personMapper.ToDTO(person)).collect(Collectors.toSet()));
 		projectDto.setUsersIds(source.getUsers().stream().map(user -> user.getId()).collect(Collectors.toSet()));
-		projectDto.setStates(source.getStates().stream().map(state -> StateToDto(state)).collect(Collectors.toSet()));
-		projectDto.setAnsewrs(projectDto.getAnswers());
+		projectDto.setStates(source.getStates().stream().map(state -> stateMapper.ToDto(state)).collect(Collectors.toSet()));
+		projectDto.setAnsewrs(source.getAnswers().stream().map(answer -> answerMapper.ToDTO(answer)).collect(Collectors.toSet()));
 		return projectDto;
-	}
-	
-	public Project ToModel(ProjectDTO source){
-		Project project = new Project();
-		project.setId(source.getId());
-		project.setLastModifiedDate(source.getLastModifiedDate());
-		project.setTeam(source.getTeam().stream().map(personDto -> personMapper.ToModel(personDto)).collect(Collectors.toSet()));
-		project.setUsers(Sets.newHashSet(userRepository.findByIdIn(source.getUsersIds().stream().collect(Collectors.toList()))));
-		project.setTitle(source.getTitle());
-		project.setStates(source.getStates().stream().map(state -> StateToModel(state)).collect(Collectors.toSet()));
-		project.setAnswers(source.getAnswers().stream().map(answerDto -> answerMapper.ToModel(answerDto)).collect(Collectors.toSet()));
-		return project;
-	}
-	
-	private StateDTO StateToDto(State source){
-		StateDTO stateDto = new StateDTO();
-		stateDto.setActive(source.isActive());
-		stateDto.setStatus(source.getStatus());
-		stateDto.setId(source.getId());
-		return stateDto;
-	}
-	
-	private State StateToModel(StateDTO source){
-		State state = new State();
-		state.setActive(source.isActive());
-		state.setStatus(source.getStatus());
-		state.setId(source.getId());
-		return state;
-	}
-	
+	}	
 }

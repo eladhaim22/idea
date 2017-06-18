@@ -1,6 +1,7 @@
  package com.uade.idea.service.mapper;
 
 import com.uade.idea.domain.Answer;
+import com.uade.idea.repository.AnswerRepository;
 import com.uade.idea.repository.QuestionRepository;
 import com.uade.idea.service.dto.AnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,17 @@ public class AnswerMapper {
 	@Autowired
 	private QuestionRepository questionRepository;
     
+	@Autowired 
+	private AnswerRepository answerRepository;
+	
 	public Answer ToModel(AnswerDTO answerDTO){
-		Answer answer = new Answer();
-		answer.setId(answerDTO.getId());
+		Answer answer;
+		if(answerDTO.getId() != null){
+			answer = answerRepository.getOne(answerDTO.getId());
+		}
+		else{
+			answer = new Answer();
+		}
 		answer.setQuestion((questionRepository.getOne(answerDTO.getQuestionId())));
 		answer.setQuestionAnswer(answerDTO.getQuestionAnswer());
 		return answer;
