@@ -1,17 +1,8 @@
 package com.uade.idea.service.dto;
 
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.uade.idea.domain.Person;
-import com.uade.idea.domain.PersonUade;
 import com.uade.idea.domain.Stage;
 
 /**

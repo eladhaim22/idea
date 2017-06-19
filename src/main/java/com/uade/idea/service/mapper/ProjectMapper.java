@@ -1,32 +1,16 @@
 package com.uade.idea.service.mapper;
 
-import com.google.common.collect.Lists;
-import com.uade.idea.domain.Authority;
-import com.uade.idea.domain.Person;
-import com.uade.idea.domain.Project;
-import com.uade.idea.domain.State;
-import com.uade.idea.domain.User;
-import com.uade.idea.repository.PersonRepository;
-import com.uade.idea.repository.ProjectRepository;
-import com.uade.idea.repository.UserRepository;
-import com.uade.idea.service.dto.PersonDTO;
-import com.uade.idea.service.dto.ProjectDTO;
-import com.uade.idea.service.dto.StateDTO;
-import com.uade.idea.service.dto.UserDTO;
+import java.util.stream.Collectors;
 
-
-import com.google.common.collect.Sets;
-import com.sun.jersey.spi.inject.Inject;
-
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.uade.idea.domain.Project;
+import com.uade.idea.repository.EvaluationRepository;
+import com.uade.idea.repository.PersonRepository;
+import com.uade.idea.repository.ProjectRepository;
+import com.uade.idea.repository.UserRepository;
+import com.uade.idea.service.dto.ProjectDTO;
 
 /**
  * Mapper for the entity User and its DTO UserDTO.
@@ -52,10 +36,15 @@ public class ProjectMapper {
 	@Autowired
 	private StateMapper stateMapper;
 	
+	@Autowired
+	private EvaluationRepository evaluationRepository;
+	
 	public Project ToModel(ProjectDTO source){
 		Project project;
 		if(source.getId() != null){
 			project = projectRepository.getOne(source.getId());
+			project.getEvaluations().clear();
+			project.getEvaluations().addAll(evaluationRepository.findAllByProjectId(project.getId()));
 		}
 		else{
 			project = new Project();
@@ -83,6 +72,7 @@ public class ProjectMapper {
 		projectDto.setUsersIds(source.getUsers().stream().map(user -> user.getId()).collect(Collectors.toSet()));
 		projectDto.setStates(source.getStates().stream().map(state -> stateMapper.ToDto(state)).collect(Collectors.toSet()));
 		projectDto.setAnsewrs(source.getAnswers().stream().map(answer -> answerMapper.ToDTO(answer)).collect(Collectors.toSet()));
+		projectDto.setEvaluationsIds(source.getEvaluations().stream().map(evaluation -> evaluation.getId()).collect(Collectors.toSet()));
 		return projectDto;
 	}	
 }

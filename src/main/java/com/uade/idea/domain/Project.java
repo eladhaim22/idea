@@ -1,15 +1,26 @@
 package com.uade.idea.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Filter;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -52,7 +63,12 @@ public class Project extends AbstractAuditingEntity implements Serializable {
     
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="project_id", nullable=false)
+    @Filter(name="answers",condition="evaluation_id is null")
     private Set<Answer> answers = new HashSet<>();
+    
+    @OneToMany
+    @JoinColumn(name="project_id",nullable=false,insertable=false,updatable=false)
+    private Set<Evaluation> evaluations = new HashSet<>();
     
     @OneToMany
 	public Set<User> getUsers() {
@@ -79,6 +95,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		return states;
 	}
 
+	
 	protected void setStates(Set<State> states) {
 		this.states = states;
 	}
@@ -101,6 +118,14 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	protected void setTeam(Set<Person> team) {
 		this.team = team;
+	}
+	
+	public Set<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	protected void setEvaluations(Set<Evaluation> evaluations) {
+		this.evaluations = evaluations;
 	}
 	
 }

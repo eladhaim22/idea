@@ -1,24 +1,11 @@
 package com.uade.idea.service.mapper;
 
-import com.uade.idea.domain.Authority;
-import com.uade.idea.domain.Person;
-import com.uade.idea.domain.PersonUade;
-import com.uade.idea.domain.Question;
-import com.uade.idea.domain.Template;
-import com.uade.idea.domain.User;
-import com.uade.idea.repository.QuestionRepository;
-import com.uade.idea.service.dto.PersonDTO;
-import com.uade.idea.service.dto.PersonUadeDTO;
-import com.uade.idea.service.dto.QuestionDTO;
-import com.uade.idea.service.dto.TemplateDTO;
-import com.uade.idea.service.dto.UserDTO;
-import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import com.uade.idea.domain.Question;
+import com.uade.idea.repository.QuestionRepository;
+import com.uade.idea.service.dto.QuestionDTO;
 
 /**
  * Mapper for the entity User and its DTO UserDTO.

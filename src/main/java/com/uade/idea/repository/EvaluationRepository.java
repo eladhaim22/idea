@@ -1,16 +1,16 @@
 package com.uade.idea.repository;
 
+
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.uade.idea.domain.Person;
+import com.uade.idea.domain.Evaluation;
 
 /**
  * Spring Data JPA repository for the Authority entity.
  */
-public interface PersonRepository extends JpaRepository<Person, Long> {
-	 
-	List<Person> findByDniIn(List<String> dni);
-
+public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
+	List<Evaluation> findAllByProjectId(Long projectId);
 }

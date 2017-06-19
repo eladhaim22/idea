@@ -116,17 +116,20 @@
     					<div ng-repeat="question in subsection">
     						{{question.detail}}
     						<div class="form-group">
-    							<textarea ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer"></textarea>
+    							<textarea ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit"></textarea>
     						</div>
     					</div>
     				</div>
     			</div>
-    		</div>
+    		
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Posutlar</button>
     		</div>
     		<div ng-if="vm.edit && vm.projectState.status == 'Initial'" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-success" ng-click="vm.changeState()">Pre-Seleccionar</button>
+    		</div>
+    		<div ng-if="vm.edit && vm.projectState.status == 'PreSelected'" style="margin-top:10px;" class="pull-right">
+    			<button type="button"  class="btn btn-success" ng-click="vm.navigateToEvaluation()">Evaluar</button>
     		</div>
     	</form>
     </div>

@@ -1,34 +1,11 @@
 package com.uade.idea.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.uade.idea.config.Constants;
-
-import com.uade.idea.domain.Authority;
-import com.uade.idea.domain.Person;
-import com.uade.idea.domain.Project;
-import com.uade.idea.domain.User;
-import com.uade.idea.service.mapper.PersonMapper;
-import com.uade.idea.service.mapper.ProjectMapper;
-
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.convert.Jsr310Converters.PeriodToStringConverter;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.uade.idea.service.mapper.PersonMapper;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -59,8 +36,7 @@ public class ProjectDTO {
     
     private Set<AnswerDTO> answers;
     
-	@Autowired
-    private PersonMapper personMapper;
+    private Set<Long> evaluationsIds;
     
     public ProjectDTO() {
         // Empty constructor needed for Jackson.
@@ -129,5 +105,13 @@ public class ProjectDTO {
 	public void setAnsewrs(Set<AnswerDTO> answers) {
 		this.answers = answers;
 	}
-	
+
+	public void setEvaluationsIds(Set<Long> evaluationsIds) {
+		this.evaluationsIds = evaluationsIds;
+	}
+
+	public Set<Long> getEvaluationsIds() {
+		return evaluationsIds;
+	}
+		
 }

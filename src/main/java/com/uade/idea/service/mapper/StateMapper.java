@@ -1,15 +1,11 @@
  package com.uade.idea.service.mapper;
 
-import com.uade.idea.domain.Answer;
-import com.uade.idea.domain.State;
-import com.uade.idea.repository.AnswerRepository;
-import com.uade.idea.repository.QuestionRepository;
-import com.uade.idea.repository.StateRepository;
-import com.uade.idea.service.dto.AnswerDTO;
-import com.uade.idea.service.dto.StateDTO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.uade.idea.domain.State;
+import com.uade.idea.repository.StateRepository;
+import com.uade.idea.service.dto.StateDTO;
 
 
 /**

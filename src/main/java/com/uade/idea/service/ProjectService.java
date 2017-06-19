@@ -1,32 +1,24 @@
 package com.uade.idea.service;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.google.common.collect.Sets;
-import com.uade.idea.domain.Authority;
 import com.uade.idea.domain.Project;
 import com.uade.idea.domain.Status;
 import com.uade.idea.domain.User;
-import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.repository.ProjectRepository;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.StateDTO;
-import com.uade.idea.service.mapper.PersonMapper;
 import com.uade.idea.service.mapper.ProjectMapper;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.mapstruct.factory.Mappers;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -88,7 +80,7 @@ public class ProjectService {
     		return projectMapper.ToDTO(project);
     	}
     	else {
-    		if(user.getAuthorities().stream().anyMatch(authoritiy -> authoritiy.getName().toString() == AuthoritiesConstants.REFERRE.toString()) &&
+    		if(user.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.REFERRE)) &&
     				project.getUsers().stream().anyMatch(u -> u.getId() == user.getId())){
     			log.debug("Getting project with id:" + id);
     			return projectMapper.ToDTO(project);

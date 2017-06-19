@@ -2,7 +2,8 @@ Create Table Answers(
 	id bigint IDENTITY(1,1),
 	question_answer nvarchar(max),
 	question_id bigint NOT NULL,
-	project_id bigint NOT NULL
+	project_id bigint NOT NULL,
+	evaluation_id bigint NULL
 )
 
 ALTER TABLE Answers
@@ -13,4 +14,7 @@ ALTER TABLE Answers
 ALTER TABLE Answers 
 	ADD CONSTRAINT FK_Answers_Projects FOREIGN KEY (project_id) 
 	REFERENCES Projects(Id);
+ALTER TABLE Answers 
+	ADD CONSTRAINT FK_Answers_Evaluation_id FOREIGN KEY (evaluation_id) 
+	REFERENCES Evaluations(Id);
 

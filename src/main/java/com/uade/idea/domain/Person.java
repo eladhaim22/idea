@@ -26,7 +26,7 @@ import java.util.Set;
 	    name="dtype",
 	    discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("person")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Person implements Serializable {
 
     private static final long serialVersionUID = 1L;

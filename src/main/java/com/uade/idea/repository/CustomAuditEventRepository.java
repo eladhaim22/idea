@@ -1,8 +1,7 @@
 package com.uade.idea.repository;
 
-import com.uade.idea.config.Constants;
-import com.uade.idea.config.audit.AuditEventConverter;
-import com.uade.idea.domain.PersistentAuditEvent;
+import java.util.Date;
+import java.util.List;
 
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
@@ -10,16 +9,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import com.uade.idea.config.audit.AuditEventConverter;
+import com.uade.idea.domain.PersistentAuditEvent;
 
 /**
  * An implementation of Spring Boot's AuditEventRepository.
  */
 @Repository
 public class CustomAuditEventRepository implements AuditEventRepository {
-
-    private static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
 
     private final PersistenceAuditEventRepository persistenceAuditEventRepository;
 

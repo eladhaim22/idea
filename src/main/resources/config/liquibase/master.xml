@@ -11,6 +11,7 @@
     <include file="classpath:config/liquibase/changelog/Scheme/Users.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Templates.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Questions.table.sql" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/Scheme/Evaluations.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Answers.table.sql" relativeToChangelogFile="false"/>   
     <include file="classpath:config/liquibase/changelog/Scheme/Users_Projects.table.sql" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/Scheme/Users_Authoritis.table.sql" relativeToChangelogFile="false"/>

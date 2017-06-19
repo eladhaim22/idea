@@ -3,37 +3,26 @@
 
     angular
         .module('ideaApp')
-        .controller('ProjectController', ProjectController);
+        .controller('EvaluationController', EvaluationController);
 
-    ProjectController.$inject = ['$scope', '$state','projectService','User','$uibModal','templateService','$q'];
+    EvaluationController.$inject = ['$scope', '$state','projectService','User','$uibModal','templateService','$q'];
 
-    function ProjectController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
+    function EvaluationController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
     	var vm = this;
-    	vm.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
-    	vm.person ={};
-    	vm.project = {};
-    	vm.project.team = [];
-        vm.project.answers = [];
     	vm.edit = $state.params.id ? true : false;
-    	
+    	vm.evaluation = {}
+    	vm.evaluation.answers = [];
     	
     	function intialize(){
-    		var promises = [templateService.getByName('Formulario_Inscripcion')];
-    		if($state.params.id)
-    			promises.push(projectService.get($state.params.id));
-    		$q.all(promises).then(function(templateAndProject){
-    			if($state.params.id){
-    				vm.project = templateAndProject[1];
-    				vm.projectState = _.find(templateAndProject[1].states, function(state){ return state.active === true });
-    			}
-    			vm.template = templateAndProject[0];
+    		templateService.getByName('Formulario_Evaluacion').then(function(template){
+    			vm.template = template;
     			vm.sectionAndSubSection = [];
-    			angular.forEach(_.toArray(_.groupBy(templateAndProject[0].questions,'section')),function(value){
+    			angular.forEach(_.toArray(_.groupBy(template.questions,'section')),function(value){
     				vm.sectionAndSubSection.push(_.toArray(_.groupBy(value,'subsection')));
     			});
     			if(!$state.params.id){
-	    			_.each(templateAndProject[0].questions,function(question){
-						vm.project.answers.push({id:null,questionId : question.id,questionAnswer:undefined})
+	    			_.each(template.questions,function(question){
+						vm.evaluation.answers.push({id:null,questionId : question.id,questionAnswer:undefined})
 					});
     			}
     		},function(error){
@@ -41,8 +30,9 @@
     		});
     	}
     	
-    	 vm.calculateAnswerIndex = function(id){
-    		return _.indexOf(vm.project.answers,_.findWhere(vm.project.answers,{questionId:id}));
+    	vm.setAnswer = function(questionId,value){
+       		var answer =_.findWhere(vm.evaluation.answers,{questionId:questionId});
+			answer.questionAnswer = value;
     	}
     	
     	vm.changeState = function (){
@@ -94,10 +84,6 @@
 	        }, function () {
 	        	console.log('Modal dismissed at: ' + new Date());
 	        });
-        }
-        
-        vm.navigateToEvaluation = function(){
-        	$state.go('evaluation',{projectId:$state.params.id});
         }
         
         function openModal (){
@@ -156,6 +142,10 @@
             }
           });
     		return modalInstance;
+        }
+        
+        vm.evalauateProject = function(){
+        	$state.go('project/' + $state.params.id + '/evaluate');
         }
         
         intialize(); 
