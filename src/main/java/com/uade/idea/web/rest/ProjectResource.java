@@ -84,7 +84,7 @@ public class ProjectResource {
     public ResponseEntity changeState(@RequestBody ProjectIdAndListOfReferres projectIdAndListOfUsers) throws URISyntaxException {
         log.debug("REST request to change project {0} to state {1}", projectIdAndListOfUsers.getProjectId());
         ProjectDTO projectDto = projectService.GetById(projectIdAndListOfUsers.getProjectId());
-        if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial)){
+        if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial && projectIdAndListOfUsers.getStatus().equals(Status.PreSelected))){
         	projectDto.getStates().stream().forEach(projectState -> projectState.setActive(false));
         	StateDTO s = new StateDTO();
         	s.setActive(true);
@@ -93,6 +93,15 @@ public class ProjectResource {
         	projectDto.setUsersIds(projectIdAndListOfUsers.getUsers());
         	projectService.SaveProject(projectDto);
         }
+        else if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial && projectIdAndListOfUsers.getStatus().equals(Status.Rejected))){
+        	projectDto.getStates().stream().forEach(projectState -> projectState.setActive(false));
+        	StateDTO s = new StateDTO();
+        	s.setActive(true);
+        	s.setStatus(Status.Rejected);
+        	projectDto.getStates().add(s);
+        	projectService.SaveProject(projectDto);
+        }
+        
         return ResponseEntity.created(new URI("/api/project/"))
                 .headers(HeaderUtil.createAlert( "el projecto esta preseleccionado",null)).build();
     }
@@ -108,18 +117,6 @@ public class ProjectResource {
         catch(SecurityException ex){
         	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-    }
-    
-    @PostMapping("/assignReferres")
-    @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity assignReferre(@RequestBody ProjectIdAndListOfReferres projectIdAndListOfUsers) throws URISyntaxException {
-    	log.debug("REST request to assign referres to project id : {0}", projectIdAndListOfUsers.getProjectId());
-        ProjectDTO projectDto = projectService.GetById(projectIdAndListOfUsers.getProjectId());
-        projectDto.setUsersIds(projectIdAndListOfUsers.getUsers());
-        projectService.SaveProject(projectDto);
-        return ResponseEntity.created(new URI("/api/project/"))
-                .headers(HeaderUtil.createAlert( "el projecto esta preseleccionado",null)).build();
     }
     
     @GetMapping("")

@@ -126,7 +126,10 @@
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Posutlar</button>
     		</div>
     		<div ng-if="vm.edit && vm.projectState.status == 'Initial'" style="margin-top:10px;" class="pull-right">
-    			<button type="button"  class="btn btn-success" ng-click="vm.changeState()">Pre-Seleccionar</button>
+    			<button type="button"  class="btn btn-success" ng-click="vm.changeState('PreSelected')">Pre-Seleccionar</button>
+    		</div>
+    		<div ng-if="vm.edit && vm.projectState.status == 'Initial'" style="margin-top:10px;" class="pull-right">
+    			<button type="button"  class="btn btn-success" ng-click="vm.changeState('Rejected')">Rechazar</button>
     		</div>
     		<div ng-if="vm.edit && vm.projectState.status == 'PreSelected'" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-success" ng-click="vm.navigateToEvaluation()">Evaluar</button>

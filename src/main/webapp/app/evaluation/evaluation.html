@@ -2,13 +2,19 @@
     <div class="row">
     	<form>
     		<div ng-repeat="section in vm.sectionAndSubSection">
-    			<div ng-if="section[0][0].section" class="section">{{section[0][0].section}}</div>
+    			<div class="row">
+    				<div ng-if="section[0][0].section" class="section col-md-12">{{section[0][0].section}}</div>
+    			</div>
     			<div ng-repeat="subsection in section">
-	   				<div ng-if="subsection[0].subsection" class="subsection">{{subsection[0].subsection}}</div>
+	   				<div class="row">
+	   					<div ng-if="subsection[0].subsection" class="subsection col-md-12">{{subsection[0].subsection}}</div>
+   					</div>
    					<div ng-repeat="question in subsection">
-   						{{question.detail}}
-   						<div class="btn-group pull-right" role="group">
-						  <button ng-repeat="number in [] | range:0:10" type="button" class="btn btn-default" ng-click="vm.setAnswer(question.id,number)">{{number}}</button>
+   						<div class="row">
+	   						<div class="col-md-6" style="line-height: 34px;">{{question.detail}}</div>
+	   						<div class="btn-group col-md-6" data-toggle="buttons">
+	   						<label class="btn btn-default" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" ng-repeat="number in [] | range:0:10" ng-model="vm.evaluation.answers[answerIndex].questionAnswer" uib-btn-radio="number" uncheckable>{{number}}</label>
+							</div>
 						</div>
    					</div>
    				</div>

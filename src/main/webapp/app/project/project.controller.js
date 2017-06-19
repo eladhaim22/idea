@@ -45,17 +45,27 @@
     		return _.indexOf(vm.project.answers,_.findWhere(vm.project.answers,{questionId:id}));
     	}
     	
-    	vm.changeState = function (){
-    		openModal().result.then(function (project) {
-	        	projectService.changeState(project.id,project.usersIds).then(function(data){
+    	vm.changeState = function (state){
+    		if(state == 'PreSelected'){
+	    		openModal().result.then(function (project) {
+		        	projectService.changeState(project.id,project.usersIds,state).then(function(data){
+		        		$state.go('projects');
+		        	},function(error){
+		        		console.log('error');
+		        	});
+		        }, function () {
+		        	console.log('Modal dismissed at: ' + new Date());
+		        });
+    		}
+    		else if(state == 'Rejected'){
+    			projectService.changeState(project.id,null,state).then(function(data){
 	        		$state.go('projects');
 	        	},function(error){
 	        		console.log('error');
 	        	});
-	        }, function () {
-	        	console.log('Modal dismissed at: ' + new Date());
-	        });
+    		}
     	}
+    	
     	
     	vm.getAnswerNode = function(questionId){
     		return _.filter(vm.project.answers,function(answer){
@@ -81,19 +91,6 @@
         	},function(error){
         		console.log(error);
         	});
-        }
-        
-        vm.openAssignModal = function(){	
-        	openModal().result.then(function (project) {
-	        	projectService.assignReferreToProject(project.id,project.usersIds).then(function(data){
-	        		console.log('El proyecto se guardo');
-	        		vm.project = project;
-	        	},function(error){
-	        		console.log('error');
-	        	});
-	        }, function () {
-	        	console.log('Modal dismissed at: ' + new Date());
-	        });
         }
         
         vm.navigateToEvaluation = function(){

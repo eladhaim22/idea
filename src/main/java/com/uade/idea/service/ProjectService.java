@@ -1,6 +1,8 @@
 package com.uade.idea.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,7 @@ import com.uade.idea.domain.User;
 import com.uade.idea.repository.ProjectRepository;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.ProjectDTO;
+import com.uade.idea.service.dto.RankingDTO;
 import com.uade.idea.service.dto.StateDTO;
 import com.uade.idea.service.mapper.ProjectMapper;
 
@@ -104,5 +107,18 @@ public class ProjectService {
     	else {
     		return Sets.newConcurrentHashSet(projectRepository.findByUserId(user.getId()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet()));
     	}
+    }
+    
+    public List<RankingDTO> GetQualifiedProject(){
+    	 List<Project> projects = new ArrayList<Project>(); 
+    	 projects = projectRepository.findByQualifiedProject();
+    	 List<RankingDTO> ranking = new ArrayList<RankingDTO>();
+    	 for(Project project : projects){
+    		 RankingDTO r = new RankingDTO();
+    		 r.setProject(projectMapper.ToDTO(project));
+    		 r.setAverage(project.getEvaluations().stream().mapToDouble(e -> e.getAnswers().stream().mapToDouble(a -> Double.parseDouble(a.getQuestionAnswer())).sum()).sum() / ((double)project.getEvaluations().stream().findFirst().get().getAnswers().size()));
+    		 ranking.add(r);
+    	 }
+    	 return ranking;
     }
 }

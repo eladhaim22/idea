@@ -15,4 +15,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	@Query(value = "SELECT * FROM Projects p JOIN Users_Projects up on p.id = up.project_id"  
 			+ " JOIN Users u on u.id = up.user_id  WHERE u.id = :userId", nativeQuery=true)
 	List<Project> findByUserId(@Param("userId") Long userId); 
+	
+	@Query(value = "SELECT * FROM Projects p JOIN States s on p.id = s.project_id where s.active = 1 and s.status = 3", nativeQuery=true)
+	List<Project> findByQualifiedProject();
+
 }

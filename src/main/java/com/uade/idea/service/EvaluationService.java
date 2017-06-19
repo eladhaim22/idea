@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.uade.idea.domain.Authority;
 import com.uade.idea.domain.Evaluation;
 import com.uade.idea.domain.Project;
+import com.uade.idea.domain.State;
 import com.uade.idea.domain.Status;
 import com.uade.idea.domain.User;
 import com.uade.idea.repository.EvaluationRepository;
@@ -51,13 +52,27 @@ public class EvaluationService {
     @Autowired 
     private ProjectRepository projectRepository;
     
+    @Autowired 
+    private UserService userService;
+    
     public void CreateEvaluation(EvaluationDTO evaluationDTO){
+    	User user = userService.getUserWithAuthorities();
     	Project project = projectRepository.getOne(evaluationDTO.getProjectId());
-    	if(project.getUsers().stream().map(user -> user.getLogin()).collect(Collectors.toList()).contains(evaluationDTO.getCreatedBy())){
+    	if(project.getUsers().stream().anyMatch(u -> u.getId() == user.getId()) && evaluationDTO.getId() == null){
     		log.debug("Saving evaluation to project {}:", evaluationDTO.getProjectId());
         	Evaluation evaluation = new Evaluation();
         	evaluation = evaluationMapper.ToModel(evaluationDTO);
+        	project.getEvaluations().add(evaluation);
         	evaluationRepository.save(evaluation);
+        	Set<User> referres = project.getUsers().stream().filter(u -> u.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.REFERRE))).collect(Collectors.toSet());
+        	if(referres.stream().anyMatch(referre -> project.getEvaluations().stream().anyMatch(e -> e.getCreatedBy().equals(referre.getLogin())))){
+        		project.getStates().forEach(state -> state.setActive(false));
+        		State state = new State();
+            	state.setActive(true);
+            	state.setStatus(Status.FinalStage);
+        		project.getStates().add(state);
+        	}		
+        	projectRepository.save(project);
     	}
     	else {
     		throw new SecurityException("The referee is not assigned for this project");
