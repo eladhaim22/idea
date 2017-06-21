@@ -28,6 +28,10 @@
     		$state.go('project',{id:id});
     	}
     	
+    	vm.getActiveStatus = function(project){
+    		return _.filter(project.states,function(state){return state.active == 1})[0].status;
+    	} 
+    	
     	intialize();
     }
 })();

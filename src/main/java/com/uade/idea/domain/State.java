@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import com.sun.istack.NotNull;
 
 @Entity
-@Table(name="States")
+@Table(name="states")
 public class State extends AbstractAuditingEntity {
 	
     private static final long serialVersionUID = 1L;

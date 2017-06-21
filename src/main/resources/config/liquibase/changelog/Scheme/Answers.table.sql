@@ -2,7 +2,7 @@ Create Table Answers(
 	id bigint IDENTITY(1,1),
 	question_answer nvarchar(max),
 	question_id bigint NOT NULL,
-	project_id bigint NOT NULL,
+	project_id bigint NULL,
 	evaluation_id bigint NULL
 )
 

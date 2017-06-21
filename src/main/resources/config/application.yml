@@ -31,6 +31,7 @@ spring:
         active: #spring.profiles.active#
     jackson:
         serialization.write_dates_as_timestamps: false
+        serializationFeature.write_enums_using_index: true
     jpa:
         open-in-view: false
         hibernate:

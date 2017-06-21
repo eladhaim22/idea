@@ -14,7 +14,7 @@
 		  		<td>{{$index}}</td>
 		  		<td class="col-md-3">{{project.title}}</td>
 		    	<td>{{project.createdDate}}</td>
-		    	<td>{{project.state}}</td>
+		    	<td>{{$parent.vm.getActiveStatus(project)}}</td>
 		    	<td ng-click="vm.navigateToProject(project.id)">Ver Detalle</td>
 		  	</tr>
 	  	</tbody>

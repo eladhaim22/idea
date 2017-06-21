@@ -16,6 +16,7 @@
         vm.project.answers = [];
     	vm.edit = $state.params.id ? true : false;
     	
+    	var states = ['Initial','PreSelected','Rejected','FinalStage'];
     	
     	function intialize(){
     		var promises = [templateService.getByName('Formulario_Inscripcion')];
@@ -48,7 +49,7 @@
     	vm.changeState = function (state){
     		if(state == 'PreSelected'){
 	    		openModal().result.then(function (project) {
-		        	projectService.changeState(project.id,project.usersIds,state).then(function(data){
+		        	projectService.changeState(project.id,project.usersIds,_.indexOf(states,state)).then(function(data){
 		        		$state.go('projects');
 		        	},function(error){
 		        		console.log('error');
@@ -58,7 +59,7 @@
 		        });
     		}
     		else if(state == 'Rejected'){
-    			projectService.changeState(project.id,null,state).then(function(data){
+    			projectService.changeState(vm.project.id,null,_.indexOf(states,state)).then(function(data){
 	        		$state.go('projects');
 	        	},function(error){
 	        		console.log('error');
@@ -87,7 +88,7 @@
         
         vm.save = function(){
         	projectService.save(vm.project).then(function(){
-        		
+        		$state.go('projects');
         	},function(error){
         		console.log(error);
         	});

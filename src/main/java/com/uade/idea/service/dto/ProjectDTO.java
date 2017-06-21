@@ -58,7 +58,12 @@ public class ProjectDTO {
         return createdBy;
     }
 
-    public Instant getCreatedDate() {
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Instant getCreatedDate() {
         return createdDate;
     }
 

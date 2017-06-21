@@ -6,5 +6,5 @@ Insert into Users (login,password_hash,first_name,last_name,email,image_url,acti
 
 Insert into authorities values ('ROLE_ADMIN'), ('ROLE_USER'),('ROLE_REFERRE')
 
-Insert into users_authorities values ((select id from Users where login = 'admin'),'ROLE_ADMIN'),
-((select id from Users where login = 'admin'),'ROLE_USER') , ((select id from Users where login = 'user'),'ROLE_USER'), ((select id from Users where login = 'referre'),'ROLE_REFERRE')
+Insert into users_authorities values ((select id from Users where login = 'admin'),'ROLE_ADMIN'), 
+((select id from Users where login = 'user'),'ROLE_USER'), ((select id from Users where login = 'referre'),'ROLE_REFERRE')

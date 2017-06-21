@@ -2,6 +2,7 @@ package com.uade.idea.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "answers")
+@Table(name = "Answers")
 //@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Answer implements Serializable {
 
@@ -25,6 +26,7 @@ public class Answer implements Serializable {
     @JoinColumn(name="question_id",nullable=false)
     private Question question;
     
+	@Column(name="question_answer")
     private String questionAnswer;
 
 	public Long getId() {

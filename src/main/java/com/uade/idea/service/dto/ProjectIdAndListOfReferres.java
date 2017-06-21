@@ -2,6 +2,7 @@ package com.uade.idea.service.dto;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.uade.idea.domain.Status;
 
 

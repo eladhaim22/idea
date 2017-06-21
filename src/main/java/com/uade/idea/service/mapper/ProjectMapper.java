@@ -49,7 +49,7 @@ public class ProjectMapper {
 		else{
 			project = new Project();
 		}
-		
+	
 		project.setLastModifiedDate(source.getLastModifiedDate());
 		project.getTeam().clear();
 		project.getTeam().addAll(personRepository.findByDniIn(source.getTeam().stream().map(personDto -> personDto.getDni()).collect(Collectors.toList())).stream().collect(Collectors.toSet()));
@@ -68,6 +68,7 @@ public class ProjectMapper {
 		projectDto.setId(source.getId());
 		projectDto.setTitle(source.getTitle());
 		projectDto.setLastModifiedDate(source.getLastModifiedDate());
+		projectDto.setCreatedDate(source.getCreatedDate());
 		projectDto.setTeam(source.getTeam().stream().map(person -> personMapper.ToDTO(person)).collect(Collectors.toSet()));
 		projectDto.setUsersIds(source.getUsers().stream().map(user -> user.getId()).collect(Collectors.toSet()));
 		projectDto.setStates(source.getStates().stream().map(state -> stateMapper.ToDto(state)).collect(Collectors.toSet()));

@@ -18,9 +18,10 @@ import org.apache.http.impl.client.AIMDBackoffManager;
 import org.hibernate.annotations.Filter;
 
 import com.sun.istack.NotNull;
+import com.uade.idea.domain.Answer;
 
 @Entity
-@Table(name="Evaluations")
+@Table(name="evaluations")
 public class Evaluation extends AbstractAuditingEntity {
 	
 	@Id
@@ -28,9 +29,8 @@ public class Evaluation extends AbstractAuditingEntity {
     private Long id;
 	
     @OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="evaluation_id", nullable=false)
-    @Filter(name="answers",condition="evaluation_id is not null")
-	private Set<Answer> answers = new HashSet<>();
+    @JoinColumn(name="evaluation_id", nullable=true)
+    private Set<Answer> answers = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name="project_id")
