@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Answers")
@@ -24,10 +25,12 @@ public class Answer implements Serializable {
     
 	@OneToOne
     @JoinColumn(name="question_id",nullable=false)
+	@NotNull
     private Question question;
     
 	@Column(name="question_answer")
-    private String questionAnswer;
+    @NotNull
+	private String questionAnswer;
 
 	public Long getId() {
 		return id;
