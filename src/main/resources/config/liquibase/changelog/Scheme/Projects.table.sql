@@ -4,11 +4,13 @@ CREATE TABLE Projects(
 	created_by varchar(50) NOT NULL,
 	created_date datetime NOT NULL,
 	last_modified_by varchar(50),
-	last_modified_date datetime
+	last_modified_date datetime,
+	period_id biging NOT NULL
 )
 
 ALTER TABLE Projects
 	ADD CONSTRAINT PK_Projects PRIMARY KEY (Id);
 
-
-
+ALTER TABLE Projects 
+	ADD CONSTRAINT FK_Projects_Periods FOREIGN KEY (period_id) 
+	REFERENCES Periods(Id);
