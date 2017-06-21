@@ -4,10 +4,12 @@ import com.codahale.metrics.annotation.Timed;
 import com.uade.idea.domain.Status;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.EvaluationService;
+import com.uade.idea.service.PeriodService;
 import com.uade.idea.service.ProjectService;
 import com.uade.idea.service.TemplateService;
 import com.uade.idea.service.UserService;
 import com.uade.idea.service.dto.EvaluationDTO;
+import com.uade.idea.service.dto.PeriodDTO;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.ProjectIdAndListOfReferres;
 import com.uade.idea.service.dto.StateDTO;
@@ -56,51 +58,59 @@ import javax.websocket.MessageHandler.Partial;
  * <p>Another option would be to have a specific JPA entity graph to handle this case.</p>
  */
 @RestController
-@RequestMapping("/api/evaluation")
+@RequestMapping("/api/period")
 public class PeriodResource {
 
     private final Logger log = LoggerFactory.getLogger(PeriodResource.class);
 
-    private final EvaluationService evaluationService;
+    private final PeriodService periodService;
         
-    public PeriodResource(EvaluationService evaluationService) {
-    	this.evaluationService = evaluationService;
-    }
-
-    @GetMapping("/{id}")
-    @Timed
-    @Secured({AuthoritiesConstants.ADMIN,AuthoritiesConstants.REFERRE})
-    public ResponseEntity GetById(@PathVariable("id") Long id) throws URISyntaxException{
-	    	log.debug("REST request evaluation by id  : {}", id);	        
-	        EvaluationDTO evaluationDTO = evaluationService.GetById(id);
-	        return new ResponseEntity<>(evaluationDTO,HttpStatus.OK);
+    public PeriodResource(PeriodService periodService) {
+    	this.periodService = periodService;
     }
     
-    @GetMapping("/ByProjectId/{id}")
-    @Timed
-    @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity GetByProjectId(@PathVariable("id") Long id) throws URISyntaxException{
-	    	log.debug("REST request evaluation by project id  : {}", id);	        
-	        Set<EvaluationDTO> evaluationsDTO = evaluationService.GetByProjectId(id);
-	        return new ResponseEntity<>(evaluationsDTO,HttpStatus.OK);
-    }
     
     @PostMapping("/")
     @Timed
-    @Secured(AuthoritiesConstants.REFERRE)
-    public ResponseEntity CreateEvaluation(@RequestBody EvaluationDTO evaluationDto) throws URISyntaxException {
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity CreatePeriod(@RequestBody PeriodDTO periodDto) throws URISyntaxException {
         try{
-    	log.debug("REST request to save evaluation by referre : {}", evaluationDto.getCreatedBy());
-        evaluationService.CreateEvaluation(evaluationDto);
-        return ResponseEntity.created(new URI("/api/evaliation/"))
-                .headers(HeaderUtil.createAlert( "la evaluacion se creo",null)).build();
+    	log.debug("REST request to save period and turn it active:");
+        periodService.CreatePeriod(periodDto);
+        return ResponseEntity.created(new URI("/api/period/"))
+                .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
         }
-        catch(SecurityException ex){
-        	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        catch(Exception ex){
+        	return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
     
+    @GetMapping("/{id}")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity getById(@PathVariable("id") String id) throws URISyntaxException{
+        try{ 
+	    	log.debug("REST request period with id  : {}", id);	        
+	        PeriodDTO periodDto = periodService.GetById(Long.parseLong(id));
+	        return new ResponseEntity<>(periodDto,HttpStatus.OK);
+        }
+        catch(Exception ex){
+        	return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
     
+    @GetMapping("/")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity getAll() throws URISyntaxException{
+    	try{ 
+	    	log.debug("REST request periods");
+	    	List<PeriodDTO> periods = periodService.GetAll();
+	    	return new ResponseEntity<>(periods, null, HttpStatus.OK);
+    	} 
+	    catch(Exception ex){
+         	return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+         }
+    } 
     
-  
 }

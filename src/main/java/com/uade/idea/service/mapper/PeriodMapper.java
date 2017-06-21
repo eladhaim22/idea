@@ -23,9 +23,6 @@ public class PeriodMapper {
 
 	@Autowired
 	private PeriodRepository periodRepository;
-
-	@Autowired
-	private ProjectRepository projectRepository;
 	
 	public Period ToModel(PeriodDTO periodDTO){
 		Period period;
@@ -43,7 +40,7 @@ public class PeriodMapper {
     
     public PeriodDTO ToDTO(Period period){
     	PeriodDTO periodDto = new PeriodDTO();
-    	periodDto.setId(periodDto.getId());
+    	periodDto.setId(period.getId());
     	periodDto.setStartingDate(period.getStartingDate());
     	periodDto.setPresentionLimitDate(period.getPresentionLimitDate());
     	periodDto.setEndingDate(period.getEndingDate());

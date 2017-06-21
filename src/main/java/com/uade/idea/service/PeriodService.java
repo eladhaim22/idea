@@ -3,6 +3,7 @@ package com.uade.idea.service;
 import com.google.common.collect.Sets;
 import com.uade.idea.domain.Authority;
 import com.uade.idea.domain.Evaluation;
+import com.uade.idea.domain.Period;
 import com.uade.idea.domain.Project;
 import com.uade.idea.domain.State;
 import com.uade.idea.domain.Status;
@@ -13,6 +14,7 @@ import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.repository.ProjectRepository;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.EvaluationDTO;
+import com.uade.idea.service.dto.PeriodDTO;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.StateDTO;
 import com.uade.idea.service.mapper.EvaluationMapper;
@@ -20,8 +22,10 @@ import com.uade.idea.service.mapper.PeriodMapper;
 import com.uade.idea.service.mapper.PersonMapper;
 import com.uade.idea.service.mapper.ProjectMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -51,4 +55,24 @@ public class PeriodService {
     @Autowired
     private PeriodMapper periodMapper;
     
+    public void CreatePeriod(PeriodDTO periodDTO){
+    	Period previousPeriod = new Period();
+    	previousPeriod = periodRepository.findOneByActiveIsTrue();
+    	previousPeriod.setActive(false);
+    	Period period = periodMapper.ToModel(periodDTO);
+    	period.setActive(true);
+    	periodRepository.save(period);
+    	periodRepository.save(previousPeriod);
+    }
+    
+    public List<PeriodDTO> GetAll(){
+    	log.debug("Getting all periods");
+    	List<Period> periods = periodRepository.findAll();
+    	return periods.stream().map(period -> periodMapper.ToDTO(period)).collect(Collectors.toList());
+    }
+    
+    public PeriodDTO GetById(Long id){
+    	log.debug("Getting period by id:{}",id);
+    	return periodMapper.ToDTO(periodRepository.getOne(id));
+    }
 }

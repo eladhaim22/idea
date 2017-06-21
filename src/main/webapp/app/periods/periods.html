@@ -1,0 +1,21 @@
+<div ng-cloak>
+	<button class="btn btn-defalut" ng-click="vm.newPeriod()">Crear periodo</button>
+	<table class="table table-striped">
+	  	<thead> 
+		  	<tr> 
+		  		<th>#</th> 
+		  		<th>Fecha de inico</th> 
+		  		<th>Fecha de fin</th> 
+		  		<th>Action</th> 
+		  	</tr> 
+		 </thead>
+		 <tbody>
+		  	<tr ng-repeat="period in vm.periods">
+		  		<td>{{$index}}</td>
+		  		<td class="col-md-3">{{period.startingDate.format('DD/MM/YYYY')}}</td>
+		    	<td>{{period.endingDate.format('DD/MM/YYYY')}}</td>
+		    	<td ng-click="vm.navigateToPeriod(period.id)">Ver Detalle</td>
+		  	</tr>
+	  	</tbody>
+	</table>
+</div>

@@ -57,7 +57,7 @@ public class EvaluationService {
     
     public void CreateEvaluation(EvaluationDTO evaluationDTO){
     	User user = userService.getUserWithAuthorities();
-    	Project project = projectRepository.getOne(evaluationDTO.getProjectId());
+    	Project project = projectRepository.findOne(evaluationDTO.getProjectId());
     	if(project.getUsers().stream().anyMatch(u -> u.getId() == user.getId()) && evaluationDTO.getId() == null){
     		log.debug("Saving evaluation to project {}:", evaluationDTO.getProjectId());
         	Evaluation evaluation = new Evaluation();

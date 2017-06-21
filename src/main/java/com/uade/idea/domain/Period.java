@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.sun.istack.NotNull;
+
 @Entity
 @Table(name="Periods")
 public class Period implements Serializable {
@@ -28,7 +30,7 @@ public class Period implements Serializable {
     private Long id;
     
     @OneToMany
-    @JoinColumn(name="project_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name="period_id", nullable = false, insertable = false, updatable = false)
     private List<Project> projects = new ArrayList<>();
 	
     @Temporal(TemporalType.TIMESTAMP)
@@ -39,6 +41,18 @@ public class Period implements Serializable {
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date endingDate;
+
+    @Column(name="active")
+	@NotNull
+    private boolean active;
+    
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
 	public Long getId() {
 		return id;

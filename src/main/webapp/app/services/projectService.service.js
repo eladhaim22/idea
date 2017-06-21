@@ -11,8 +11,8 @@
 		projectService.fill = entityServiceFactory.buildFill(null, function () {
 			return [User.query()];
 		}, function (project, users) {
-			project.Users = _.map(project.usersIds, function (userId) { return angular.copy(_.find(users[0],function(user){return user.id == userId})); });
-			project.createdDate = new moment(project.createdDate).format("D/MM/YYYY");;
+			project.Users = _.map(project.usersIds, function (userId) { return angular.copy(_.find(users[0],function(user){return user.id == userId}))});
+			project.createdDate = new moment(project.createdDate).format("DD/MM/YYYY");
 		});
 		
 

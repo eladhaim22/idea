@@ -42,7 +42,7 @@ public class ProjectMapper {
 	public Project ToModel(ProjectDTO source){
 		Project project;
 		if(source.getId() != null){
-			project = projectRepository.getOne(source.getId());
+			project = projectRepository.findOne(source.getId());
 			project.getEvaluations().clear();
 			project.getEvaluations().addAll(evaluationRepository.findAllByProjectId(project.getId()));
 		}

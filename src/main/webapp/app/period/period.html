@@ -1,0 +1,41 @@
+<div ng-cloak>
+	    <div class="row">
+    	<form name="periodForm">
+    		<div class="row">
+	    		<div class="col-md-4">
+			        <span>Fecha de inicio</span>
+			        <p class="input-group">
+			          <input type="text" class="form-control" uib-datepicker-popup="{{'dd/MM/yyyy'}}" ng-model="vm.period.startingDate"
+			           is-open="vm.popupStart.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly/>
+			          <span class="input-group-btn">
+			            <button type="button" class="btn btn-default" ng-click="vm.openStartingDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+			          </span>
+			        </p>
+		        </div>
+	        	<div class="col-md-4">
+			        <span>Fecha limite de presentacion</span>
+			        <p class="input-group">
+			          <input type="text" class="form-control" uib-datepicker-popup="{{'dd-MMMM-yyyy'}}" ng-model="vm.period.presentionLimitDate" 
+			          is-open="vm.popupLimit.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly/>
+			          <span class="input-group-btn">
+			            <button type="button" class="btn btn-default" ng-click="vm.openPresentionLimitDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+			          </span>
+			        </p>
+		        </div>
+		        <div class="col-md-4">
+		        	<span>Fecha de Final</span>
+			        <p class="input-group">
+			          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.period.endingDate"
+			           is-open="vm.popupEnd.opened" datepicker-options="vm.dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" readonly />
+			          <span class="input-group-btn">
+			            <button type="button" class="btn btn-default" ng-click="vm.openEndingDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+			          </span>
+			        </p>
+			    </div>
+	        </div>
+    		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
+    			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Guardar</button>
+    		</div>
+    	</form>
+    </div>
+</div>

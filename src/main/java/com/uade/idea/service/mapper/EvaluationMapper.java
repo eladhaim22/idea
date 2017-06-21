@@ -40,7 +40,7 @@ public class EvaluationMapper {
 		}
 		evaluation.getAnswers().clear();
 		evaluation.getAnswers().addAll(evaluationDTO.getAnswers().stream().map(answer -> answerMapper.ToModel(answer)).collect(Collectors.toSet()));
-		evaluation.setProject(projectRepository.getOne(evaluationDTO.getProjectId()));
+		evaluation.setProject(projectRepository.findOne(evaluationDTO.getProjectId()));
 		return evaluation;
 	}
     

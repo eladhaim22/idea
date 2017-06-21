@@ -130,4 +130,11 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 		this.evaluations = evaluations;
 	}
 
+	public Period getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Period period) {
+		this.period = period;
+	}
 }
