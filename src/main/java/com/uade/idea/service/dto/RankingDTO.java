@@ -1,11 +1,13 @@
 package com.uade.idea.service.dto;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class RankingDTO {
 
 	private ProjectDTO project;
-	private double average;
+	private Double average;
 	
 	public RankingDTO(){}
 
@@ -17,13 +19,14 @@ public class RankingDTO {
 		this.project = project;
 	}
 
-	public double getAverage() {
+	public Double getAverage() {
 		return average;
 	}
 
-	public void setAverage(double average) {
-		DecimalFormat dtime = new DecimalFormat("#.###"); 
-		this.average = Double.valueOf(dtime.format(average));
+	public void setAverage(Double average) {
+		BigDecimal bd = new BigDecimal(average);
+		bd = bd.setScale(3, RoundingMode.HALF_UP);
+		this.average = bd.doubleValue();
 	}
 	
 }

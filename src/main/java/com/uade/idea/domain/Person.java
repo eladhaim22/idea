@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -36,7 +39,7 @@ public class Person implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "firstname") 
+    @Column(name = "firstname")
     private String firstName;
     
 	@NotNull
@@ -44,17 +47,20 @@ public class Person implements Serializable {
     private String lastName;
     
     @NotNull
-    @Size(min = 7,max = 9)
+    @Size(min = 7,max = 8)
     @Column(unique = true,name = "dni")
     private String dni;
     
     @Column(name = "phonenumber")
     private String phoneNumber;
     
+    @Email
     @Column(name = "email")
     private String email;
     
     @Column(name = "age")
+    @Min(value=12)
+    @Max(value=99)
     private int age;
     
     @JsonIgnore

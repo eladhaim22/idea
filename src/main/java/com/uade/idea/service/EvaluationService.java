@@ -62,7 +62,7 @@ public class EvaluationService {
     		log.debug("Saving evaluation to project {}:", evaluationDTO.getProjectId());
         	Evaluation evaluation = new Evaluation();
         	evaluation = evaluationMapper.ToModel(evaluationDTO);
-        	project.getEvaluations().add(evaluation);
+        	//project.getEvaluations().add(evaluation);
         	evaluationRepository.save(evaluation);
         	Set<User> referres = project.getUsers().stream().filter(u -> u.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.REFERRE))).collect(Collectors.toSet());
         	if(referres.stream().anyMatch(referre -> project.getEvaluations().stream().anyMatch(e -> e.getCreatedBy().equals(referre.getLogin())))){

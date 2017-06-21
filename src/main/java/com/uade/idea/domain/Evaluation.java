@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,12 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.http.impl.client.AIMDBackoffManager;
-import org.hibernate.annotations.Filter;
-
-import com.sun.istack.NotNull;
-import com.uade.idea.domain.Answer;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="evaluations")
@@ -31,10 +25,12 @@ public class Evaluation extends AbstractAuditingEntity {
 	
     @OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="evaluation_id", nullable=true)
+    @NotNull
     private Set<Answer> answers = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="project_id")
+    @NotNull
     private Project project;
     
 	public Long getId() {

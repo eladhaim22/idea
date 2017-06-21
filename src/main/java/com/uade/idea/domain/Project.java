@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Filter;
@@ -34,6 +35,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	private Long id;
 
 	@Column(name = "title")
+	@NotNull
 	private String title;
 
 	@ManyToOne
@@ -64,7 +66,7 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "project_id", nullable = false)
-	//@Filter(name = "answers", condition = "evaluation_id is null")
+	@Filter(name = "answers", condition = "evaluation_id is null")
 	private Set<Answer> answers = new HashSet<>();
 
 	@OneToMany
