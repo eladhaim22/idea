@@ -22,9 +22,13 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Filter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.hibernate.annotations.*;
 @Entity
 @Table(name = "projects")
+@FilterDef(name="filterByActivetedPeriod")
+@Filters( {
+    @Filter(name="filterByActivetedPeriod", condition=":period.active = 1")
+} )
 // @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project extends AbstractAuditingEntity implements Serializable {
 

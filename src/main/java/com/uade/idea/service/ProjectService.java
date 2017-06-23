@@ -1,13 +1,11 @@
 package com.uade.idea.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Sets;
-import com.uade.idea.domain.Period;
 import com.uade.idea.domain.Project;
 import com.uade.idea.domain.Status;
 import com.uade.idea.domain.User;
-import com.uade.idea.repository.PeriodRepository;
 import com.uade.idea.repository.ProjectRepository;
+import com.uade.idea.repository.ProjectRepositoryCustomImpl;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.RankingDTO;
@@ -48,30 +45,21 @@ public class ProjectService {
     
     @Autowired 
     private PersonService personService;
-    
-    @Autowired 
-    private PeriodRepository periodRepository;
  
     public void CreateProject(ProjectDTO projectDTO){
     	log.debug("Saving project:", projectDTO.getTitle());
-    	Period period = periodRepository.findOneByActiveIsTrue();
-    	if(period.getStartingDate().before(Calendar.getInstance().getTime()) && period.getEndingDate().after(Calendar.getInstance().getTime())){
-	    	Set<Long> usersIds = new HashSet<Long>();
-	    	usersIds.add(userService.getUserWithAuthorities().getId());
-	    	projectDTO.setUsersIds(usersIds);
-	    	StateDTO stateDto = new StateDTO();
-	    	stateDto.setActive(true);
-	    	stateDto.setStatus(Status.Initial);
-	    	Set<StateDTO> states = new HashSet<>();
-	    	states.add(stateDto);
-	    	projectDTO.setStates(states);
-	    	personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
-	    	Project project = projectMapper.ToModel(projectDTO);
-	    	project.setPeriod(period);
-	    	projectRepository.save(project);
-    	}
-    	else
-    		throw new ServiceException("La convoctoria no esta abierta todavia");
+    	Set<Long> usersIds = new HashSet<Long>();
+    	usersIds.add(userService.getUserWithAuthorities().getId());
+    	projectDTO.setUsersIds(usersIds);
+    	StateDTO stateDto = new StateDTO();
+    	stateDto.setActive(true);
+    	stateDto.setStatus(Status.Initial);
+    	Set<StateDTO> states = new HashSet<>();
+    	states.add(stateDto);
+    	projectDTO.setStates(states);
+    	personService.saveAndUpdateUsers(projectDTO.getTeam().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
+    	Project project = projectMapper.ToModel(projectDTO);
+    	projectRepository.save(project);
     }
     
     public void SaveProject(ProjectDTO projectDTO){
@@ -90,7 +78,7 @@ public class ProjectService {
     
     public ProjectDTO GetById(long id){
     	User user = userService.getUserWithAuthorities();
-    	Project project = projectRepository.findOne(id);
+    	Project project = projectRepository.getOne(id);
     	if(user.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.ADMIN))){
     		log.debug("Getting project with id:" + id);
     		return projectMapper.ToDTO(project);

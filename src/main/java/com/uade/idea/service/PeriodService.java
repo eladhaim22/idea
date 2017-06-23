@@ -58,7 +58,9 @@ public class PeriodService {
     public void CreatePeriod(PeriodDTO periodDTO){
     	Period previousPeriod = new Period();
     	previousPeriod = periodRepository.findOneByActiveIsTrue();
-    	previousPeriod.setActive(false);
+    	if(previousPeriod != null){
+    		previousPeriod.setActive(false);
+    	}
     	Period period = periodMapper.ToModel(periodDTO);
     	period.setActive(true);
     	periodRepository.save(period);
