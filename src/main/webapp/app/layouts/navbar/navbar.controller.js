@@ -5,9 +5,9 @@
         .module('ideaApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService','excelService'];
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService,excelService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;

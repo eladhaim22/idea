@@ -64,7 +64,6 @@ public class PeriodService {
     	Period period = periodMapper.ToModel(periodDTO);
     	period.setActive(true);
     	periodRepository.save(period);
-    	periodRepository.save(previousPeriod);
     }
     
     public List<PeriodDTO> GetAll(){

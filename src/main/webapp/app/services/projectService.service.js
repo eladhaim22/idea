@@ -8,6 +8,13 @@
 			return restService.post("api/project/changeState",{"projectId" : projectId,"users": referres,"status":state});
 		}
 
+		projectService.getAllWithPeriod = function(period_id){
+			if(period_id)
+				return restService.get("/api/project",{headers: {Period_Id: period_id}});
+			else
+				return restService.get("/api/project");
+		}
+		
 		projectService.fill = entityServiceFactory.buildFill(null, function () {
 			return [User.query()];
 		}, function (project, users) {

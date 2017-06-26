@@ -45,6 +45,7 @@ public class PeriodMapper {
     	periodDto.setPresentionLimitDate(period.getPresentionLimitDate());
     	periodDto.setEndingDate(period.getEndingDate());
     	periodDto.setProjects(period.getProjects().stream().map(project -> project.getId()).collect(Collectors.toList()));
+    	periodDto.setActive(period.isActive());
     	return periodDto;
     }
 }

@@ -11,6 +11,7 @@ public class PeriodDTO {
     private Date startingDate;
     private Date presentionLimitDate;
     private Date endingDate;
+    private boolean active;
 
 	public Long getId() {
 		return id;
@@ -52,5 +53,12 @@ public class PeriodDTO {
 		this.endingDate = endingDate;
 	}
     
+	public void setActive(boolean active){
+		this.active = active;
+	}
+	
+	public boolean getActive(){
+		return this.active;
+	}
 }
 

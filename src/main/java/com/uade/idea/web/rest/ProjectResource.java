@@ -1,6 +1,7 @@
 package com.uade.idea.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.microsoft.windowsazure.exception.ServiceException;
 import com.uade.idea.domain.Status;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.ProjectService;
@@ -73,9 +74,14 @@ public class ProjectResource {
     @Secured(AuthoritiesConstants.USER)
     public ResponseEntity createProject(@RequestBody ProjectDTO projectDto) throws URISyntaxException {
         log.debug("REST request to save project : {}", projectDto.getTitle());
-        projectService.CreateProject(projectDto);
-        return ResponseEntity.created(new URI("/api/project/"))
-                .headers(HeaderUtil.createAlert( "el projecto se creo",null)).build();
+        try {
+			projectService.CreateProject(projectDto);
+			return ResponseEntity.created(new URI("/api/project/"))
+	                .headers(HeaderUtil.createAlert( "el projecto se creo",null)).build();
+        } catch (ServiceException e) {
+        	return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+        
     }
     
     @PostMapping("/changeState")

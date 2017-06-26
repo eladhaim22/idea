@@ -1,4 +1,11 @@
 <div ng-cloak>
+	<div class="row">
+		<div class="col-md-offset-9 col-md-3">
+			<select ng-model="vm.periodId" class="form-control" ng-change="vm.change()">
+				<option ng-repeat="period in vm.periods" value={{period.id}}>{{period.startingDate + "-" + period.endingDate}}</option> 
+			</select>
+		</div>
+	</div>
 	<table class="table table-striped">
 	  	<thead> 
 		  	<tr> 

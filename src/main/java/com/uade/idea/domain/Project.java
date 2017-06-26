@@ -18,17 +18,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Filter;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 @Entity
 @Table(name = "projects")
-@FilterDef(name="filterByActivetedPeriod")
-@Filters( {
-    @Filter(name="filterByActivetedPeriod", condition=":period.active = 1")
-} )
+@FilterDefs( {
+    @FilterDef(name="getProjectsOfActivePeriod"),
+    @FilterDef(name="getProjectsByPeriod",parameters = { @ParamDef(name = "period_id", type = "long") })
+})
+@Filters({
+	@Filter(name="getProjectsOfActivePeriod",condition="id in (select projects.id from projects where projects.period_id = (select periods.id from periods where periods.active = 1))"),
+	@Filter(name="getProjectsByPeriod", condition="id in (select projects.id from projects where projects.period_id = :period_id)")
+})
 // @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project extends AbstractAuditingEntity implements Serializable {
 
