@@ -15,7 +15,6 @@
     	vm.project.team = [];
         vm.project.answers = [];
     	vm.edit = $state.params.id ? true : false;
-    	
     	var states = ['Initial','PreSelected','Rejected','FinalStage'];
     	
     	function intialize(){
@@ -87,6 +86,7 @@
         }
         
         vm.save = function(){
+        	console.log($scope);
         	projectService.save(vm.project).then(function(){
         		$state.go('projects');
         	},function(error){

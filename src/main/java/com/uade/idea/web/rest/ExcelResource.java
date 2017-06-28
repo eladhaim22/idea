@@ -21,9 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -77,7 +79,8 @@ public class ExcelResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity downloadExcelOutputExl(HttpServletResponse response) throws IOException{  
     	excelService.createExcelOutputExcel(response);
-    	 
+    	
+    	DeferredResult<byte[]> r = new DeferredResult<>();
     	return ResponseEntity.ok()
     	            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
     	            .body(response.getOutputStream()); 

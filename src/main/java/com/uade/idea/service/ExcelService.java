@@ -1,5 +1,6 @@
 package com.uade.idea.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,17 +43,20 @@ public class ExcelService{
     }
     
     public WritableWorkbook createExcelOutputExcel(HttpServletResponse response) {
-       String fileName = Calendar.getInstance().getTime().toString();
+       String fileName = (new SimpleDateFormat("dd_MM_yyyy")).format(Calendar.getInstance().getTime()).toString();
        WritableWorkbook writableWorkbook = null;
        try {
-           response.setContentType("application/vnd.ms-excel");
 
-           response.setHeader("Content-Disposition:", "attachment; filename=\"" + fileName + "\"");
+           response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".xls");
 
            writableWorkbook = Workbook.createWorkbook(response.getOutputStream());
           
            WritableSheet excelOutputsheet = writableWorkbook.createSheet("Excel Output", 0);
            
+           for(int i=0;i<excelOutputsheet.getColumns();i++){
+        	   excelOutputsheet.setColumnView(i, 255);
+           }
+                     
            this.getSession().enableFilter("getProjectsOfActivePeriod");
            
            List<Project> projects = projectRepository.findAll();
