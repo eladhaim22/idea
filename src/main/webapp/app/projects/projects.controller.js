@@ -12,25 +12,32 @@
     	
     	function intialize(period_id){
     		var promises = {
-    					projects : projectService.getAllWithPeriod(period_id),
-    					periods : periodService.getAll()}
-    		$q.all(promises).then(function(data){
-    			vm.projects = data.projects;
-    			angular.forEach(vm.projects,function(project){
-    				project.createdDate = new moment(project.createdDate).format("DD/MM/YYYY");
-    			});
-    			var defaultPeriod = data.periods.splice(_.indexOf(data.periods,_.filter(data.periods,function(period){return period.active})))[0];
-    			vm.periods = _.sortBy(data.periods,'startingDate');
-    			vm.periods.unshift(defaultPeriod);
-    			angular.forEach(vm.periods,function(period){
-    				period.startingDate = period.startingDate.format("DD/MM/YYYY");
-    				period.endingDate = period.endingDate.format("DD/MM/YYYY");
-    			});
-    			vm.periodId = vm.periodId ? defaultPeriod.id : vm.periodId; 
-    		},function(error){
-    			
-    		});
-    		
+    					projects : projectService.getAllWithPeriod(period_id)}
+    		Principal.hasAuthority('ROLE_ADMIN').then(function(admin){
+    			if(admin){
+    				promises.periods = periodService.getAll()
+    			}
+    			$q.all(promises).then(function(data){
+        			vm.projects = data.projects;
+        			angular.forEach(vm.projects,function(project){
+        				project.createdDate = new moment(project.createdDate).format("DD/MM/YYYY");
+        			});
+        			if (admin){
+    	    			var defaultPeriod = data.periods.splice(_.indexOf(data.periods,_.filter(data.periods,function(period){return period.active})))[0];
+    	    			vm.periods = _.sortBy(data.periods,'startingDate');
+    	    			vm.periods.unshift(defaultPeriod);
+    	    			angular.forEach(vm.periods,function(period){
+    	    				period.startingDate = period.startingDate.format("DD/MM/YYYY");
+    	    				period.endingDate = period.endingDate.format("DD/MM/YYYY");
+    	    			});
+    	    			vm.periodId = vm.periodId ? defaultPeriod.id : vm.periodId; 
+        			}
+        		},function(error){
+        			
+        		});
+			},function(error){
+				
+			});
     	}
     	
     	vm.changePeriod = function(){
