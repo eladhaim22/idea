@@ -6,7 +6,8 @@
 		  		<th>#</th> 
 		  		<th>Fecha de inico</th> 
 		  		<th>Fecha de fin</th> 
-		  		<th>Action</th> 
+		  		<th>Action</th>
+		  		<th>Estado</th> 
 		  	</tr> 
 		 </thead>
 		 <tbody>
@@ -15,6 +16,8 @@
 		  		<td class="col-md-3">{{period.startingDate.format('DD/MM/YYYY')}}</td>
 		    	<td>{{period.endingDate.format('DD/MM/YYYY')}}</td>
 		    	<td ng-click="vm.navigateToPeriod(period.id)">Ver Detalle</td>
+		    	<td ng-if="period.active"><span class="label label-primary">Activo</span></td>
+				<td ng-if="!period.active"><span class="label label-danger">No Activo</span></td>
 		  	</tr>
 	  	</tbody>
 	</table>

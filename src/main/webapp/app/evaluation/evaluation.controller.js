@@ -35,12 +35,19 @@
      	}
         
         vm.save = function(){
-        	vm.evaluation.projectId = $state.params.projectId;
-        	evaluationService.save(vm.evaluation).then(function(){
-        		
-        	},function(error){
-        		console.log(error);
-        	});
+        	if(!_.some(vm.evaluation.answers, function(answer) {
+        	    return answer.questionAnswer == undefined;
+        	})){
+	        	vm.evaluation.projectId = $state.params.projectId;
+	        	evaluationService.save(vm.evaluation).then(function(){
+	        	$state.go('projects');
+	        	},function(error){
+	        		console.log(error);
+	        	});
+        	}
+        	else{
+        		vm.raiseError = true;
+        	}
         }
         
         intialize(); 

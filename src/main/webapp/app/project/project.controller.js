@@ -10,7 +10,6 @@
     function ProjectController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
     	var vm = this;
     	vm.stages = [
-    		{label:'Eliga una etapa',value:undefined},
     		{label:'1er año',value:0},
     		{label:'2do año',value:1},
     		{label:'3er año',value:2},
@@ -121,7 +120,7 @@
         				!vm.person.stage)){
         			$scope.form.fileNumber.$setDirty();
         			$scope.form.career.$setDirty();
-        			$scope.form.stage.$setDirty();
+        			$scope.form.stage.$setTouched();
         			return false;
         		}
         		return !invalid ? true : false; 
@@ -204,8 +203,12 @@
             	}
             	
             	$scope.ok = function () {
-            		$uibModalInstance.close($scope.project);
-            		scope.$destroy();
+            		if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
+	            		$uibModalInstance.close($scope.project);
+	            		scope.$destroy();
+            		}
+            		else
+            			$scope.raiseError = true;
             	};
             	
             	$scope.cancel = function(){

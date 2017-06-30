@@ -1,8 +1,9 @@
 <div ng-cloak>
 	<div class="row">
 		<div class="col-md-offset-9 col-md-3" has-authority="ROLE_ADMIN">
-			<select ng-model="vm.periodId" class="form-control" ng-change="vm.change()">
-				<option ng-repeat="period in vm.periods" value={{period.id}}>{{period.startingDate + "-" + period.endingDate}}</option> 
+			<select ng-model="vm.selectedPeriod" class="form-control" ng-change="vm.change()" 
+				ng-options="period as period.startingDate + '-' + period.endingDate for period in vm.periods track by period.id">
+				<!--  >option ng-repeat="period in vm.periods" value={{period.id}}>{{period.startingDate + "-" + period.endingDate}}</option--> 
 			</select>
 		</div>
 	</div>
@@ -22,7 +23,8 @@
 		  		<td class="col-md-3">{{project.title}}</td>
 		    	<td>{{project.createdDate}}</td>
 		    	<td>{{$parent.vm.getActiveStatus(project)}}</td>
-		    	<td ng-click="vm.navigateToProject(project.id)">Ver Detalle</td>
+		    	<td has-authority="ROLE_REFEREE" ng-if="vm.projectStatus(project) == PreSelected" ng-click="vm.navigateToProject(project.id)">Evaluar</td>
+		    	<td has-any-authority="ROLE_USER,ROLE_ADMIN" ng-click="vm.navigateToProject(project.id)">Detalles</td>
 		  	</tr>
 	  	</tbody>
 	</table>

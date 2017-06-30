@@ -348,4 +348,9 @@ ui bootstrap tweaks
 .subsection{
 	font-size:16px;
 }
+
+.error-validation{
+	color:red;
+	display:block;
+}
 /* jhipster-needle-css-add-main JHipster will add new css style */

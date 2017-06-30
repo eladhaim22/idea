@@ -30,7 +30,7 @@
     	    				period.startingDate = period.startingDate.format("DD/MM/YYYY");
     	    				period.endingDate = period.endingDate.format("DD/MM/YYYY");
     	    			});
-    	    			vm.periodId = vm.periodId ? defaultPeriod.id : vm.periodId; 
+    	    			vm.selectedPeriod = !vm.selectedPeriod ? defaultPeriod : vm.selectedPeriod; 
         			}
         		},function(error){
         			
@@ -53,11 +53,15 @@
     	}
     	
     	vm.change = function(){
-    		var period = _.filter(vm.periods,function(p){return p.id == vm.periodId})[0];
+    		var period = _.filter(vm.periods,function(p){return p.id == vm.selectedPeriod.id})[0];
     		if(!period.active)
     			intialize(period.id);
     		else
     			intialize(null);
+    	}
+    	
+    	vm.projectStatus = function(project){
+    		return _.filter(project.states,function(state){return state.active})[0].status;
     	}
     	
     	intialize(null);

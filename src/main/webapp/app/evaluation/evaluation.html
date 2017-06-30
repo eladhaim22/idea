@@ -19,6 +19,7 @@
    					</div>
    				</div>
 	   		</div>
+	   		<div ng-if="vm.raiseError"  class="alert alert-danger">Debe contestar todos los idems</div>
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Guardar</button>
     		</div>
