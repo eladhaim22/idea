@@ -9,7 +9,16 @@
 
     function ProjectController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
     	var vm = this;
-    	vm.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
+    	vm.stages = [
+    		{label:'Eliga una etapa',value:undefined},
+    		{label:'1er año',value:0},
+    		{label:'2do año',value:1},
+    		{label:'3er año',value:2},
+    		{label:'4to año',value:3},
+    		{label:'5to año',value:4},
+    		{label:'Graduado',value:5},
+    		{label:'Post Grado',value:6}
+    	];
     	vm.person ={};
     	vm.project = {};
     	vm.project.team = [];
@@ -74,11 +83,53 @@
     	}
     	
         vm.addPersonToProject = function(){
-        	if(vm.person.type){
+        	if(personIsValid()){
 	        	vm.project.team.push(angular.copy(vm.person));
 	        	vm.person = {};
 	        	vm.personType = undefined;
-	        }
+	        	setPersonInputsPristine();
+        	}
+        }
+        
+        function setPersonInputsPristine(){
+        	$scope.form.Type.$setPristine();
+        	$scope.form.firstName.$setPristine();
+			$scope.form.lastName.$setPristine();
+			$scope.form.dni.$setPristine();
+			$scope.form.age.$setPristine();
+			$scope.form.phoneNumber.$setPristine();
+			$scope.form.email.$setPristine();
+			$scope.form.fileNumber.$setPristine();
+			$scope.form.career.$setPristine();
+			$scope.form.stage.$setPristine();
+        }
+        
+        function personIsValid(){
+        	if(vm.person.type){
+        		var invalid = false;
+        		if(!$scope.form.firstName.$valid || !$scope.form.lastName.$valid || !$scope.form.dni.$valid ||
+        				!$scope.form.email.$valid || !$scope.form.phoneNumber.$valid || !$scope.form.age.$valid){
+        			$scope.form.firstName.$setDirty();
+        			$scope.form.lastName.$setDirty();
+        			$scope.form.dni.$setDirty();
+        			$scope.form.age.$setDirty();
+        			$scope.form.phoneNumber.$setDirty();
+        			$scope.form.email.$setDirty();
+        			invalid = true;
+        		}
+        		if((vm.person.type == 'personUade') && (!$scope.form.fileNumber.$valid || !$scope.form.career.$valid ||
+        				!vm.person.stage)){
+        			$scope.form.fileNumber.$setDirty();
+        			$scope.form.career.$setDirty();
+        			$scope.form.stage.$setDirty();
+        			return false;
+        		}
+        		return !invalid ? true : false; 
+    	}
+        	else {
+        		$scope.form.Type.$setDirty();
+        		return false;
+        	}
         }
         
         vm.deletePersonFromProject = function(index){
@@ -86,12 +137,29 @@
         }
         
         vm.save = function(){
-        	console.log($scope);
-        	projectService.save(vm.project).then(function(){
-        		$state.go('projects');
-        	},function(error){
-        		console.log(error);
-        	});
+        	if($scope.form.$valid && vm.project.team.length > 0){
+		        	projectService.save(vm.project).then(function(){
+		        		$state.go('projects');
+		        	},function(error){
+		        		console.log(error);
+		        	});
+        	}
+        	else
+        		if(!$scope.form.$valid){
+		    		 angular.forEach($scope.form.$error, function(controls, errorName) {
+		    		        angular.forEach(controls, function(control) {
+		    		            if(control.$name != 'firstName' && control.$name != 'lastName' && control.$name != 'dni'
+		    		            	&& control.$name != 'fileNumber' && control.$name != 'career' && control.$name != 'stage'
+		    		            		&& control.$name != 'age' && control.$name != 'phoneNumber' && control.$name != 'email'
+		    		            			&& control.$name != 'Type'){
+			            			control.$setDirty();
+		    		            }
+		    		        });
+		    		    });
+        		}
+        		if(!vm.project.team.length > 0){
+        			vm.teamError = true;
+        		}
         }
         
         vm.navigateToEvaluation = function(){
