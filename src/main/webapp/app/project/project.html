@@ -1,84 +1,13 @@
 <div ng-cloak>
     <div class="row">
-    	<form name="form">
+    	<form name="form" show-validation="nestedForm">
     		<div class="form-group">
     			<input type="text" class="form-control" name="title" placeholder="Ingrese el titulo" ng-model="vm.project.title" ng-disabled="vm.edit" required>
-    			<span class="error-validation" ng-show="form.title.$error.required && !form.title.$pristine">El titulo es obligatrio</span>
+    			<span class="help-block" ng-show="form.title.$error.required && !form.title.$pristine">El titulo es obligatrio</span>
     		</div>
-    		<ng-form name="nestedForm" isolate-form>
-    		<div class="form-group">
-    			<div class="row">
-    				<div class="col-md-2">
-    					<input type="radio" name="Type" value="uade" ng-model="vm.personType" ng-change="vm.person.type = 'personUade'"  ng-disabled="vm.edit" ng-required="true">Uade<br>
-  					</div>
-  					<div class="col-md-2">
-  						<input type="radio" name="Type" value="extern" ng-model="vm.personType" ng-change="vm.person.type = 'person'"  ng-disabled="vm.edit" ng-required="true">Externo<br>
-    				</div>
-    			</div>
-    			<div class="row">
-	    			<div class="col-md-12">
-	   					<span class="error-validation" ng-show="nestedForm.Type.$error.required && !nestedForm.Type.$pristine">Debe elegir tipo de persona</span>
-	   				</div>
-   				</div>
-    		</div>	
-    		<div class="form-group" ng-if="!vm.edit">	
-    			<div class="row">
-	    			<div class="col-md-4">
-	    				<input type="text" class="form-control" name="firstName" placeholder="Nombre" ng-model="vm.person.firstName" required>
-	    				<span class="error-validation" ng-show="nestedForm.firstName.$error.required && !nestedForm.firstName.$pristine">El nombre es obligatrio</span>
-	    			</div>
-	    			<div class="col-md-4">
-	    				<input type="text" class="form-control" name="lastName" placeholder="Apellido"ng-model="vm.person.lastName" required>
-	    				<span class="error-validation" ng-show="nestedForm.lastName.$error.required && !nestedForm.lastName.$pristine">El apellido es obligatrio</span>
-	    			</div>
-	    			<div class="col-md-3">
-	    				<input type="text" name="dni" class="form-control" placeholder="DNI" ng-model="vm.person.dni" ng-pattern="/^[0-9]{7,8}$/" required>
-	    				<span class="error-validation" ng-show="nestedForm.dni.$error.required && !nestedForm.dni.$pristine">El dni es obligatrio</span>
-	    				<span class="error-validation" ng-show="nestedForm.dni.$invalid && !nestedForm.dni.$pristine">El dni es invalido</span>
-	    			</div>
-    			</div>
-    		</div>
-    		<div class="form-group" ng-if="!vm.edit && vm.person.type === 'personUade'">	
-    			<div class="row">
-	    			<div class="col-md-4">
-	    				<input type="text" name="career" class="form-control" placeholder="Carrera" ng-model="vm.person.career" required>
-	    				<span class="error-validation" ng-show="nestedForm.career.$error.required && !nestedForm.career.$pristine">Debe ingresar la carrera</span>
-	    			</div>
-	    			<div class="col-md-4">
-	    				<input type="text" name="fileNumber" class="form-control" placeholder="FileNumber" ng-model="vm.person.fileNumber" required>
-	    				<span class="error-validation" ng-show="nestedForm.fileNumber.$error.required && !nestedForm.fileNumber.$pristine">El legajo es obligatrio</span>
-	    			</div>
-	    			<div class="col-md-3">
-		    			<select class="form-control col-md-6" name="stage" ng-model="vm.person.stage" ng-init="vm.person.stage = vm.stages[0].value" 
-		    			 ng-options="vm.stages.indexOf(stage) as stage for stage in vm.stages" name="stageSelect" required>
-		    			 	<option value="">Eliga una etapa</option> 
-		    			 </select>
-		    			<span class="error-validation" ng-show="nestedForm.stage.$error.required && nestedForm.stage.$touched">Debe elijir una etapa</span> 
-	    			</div>
-    			</div>
-    		</div>
-    		<div class="form-group" ng-if="!vm.edit">	
-    			<div class="row">
-	    			<div class="col-md-4">
-	    				<input type="text" name="age" class="form-control" placeholder="Eded" ng-model="vm.person.age" ng-pattern="/^[0-9]{1,2}$/" required>
-	    				<span class="error-validation" ng-show="nestedForm.age.$error.required && !nestedForm.age.$pristine">La edad es obligatrio</span>
-	    				<span class="error-validation" ng-show="nestedForm.age.$invalid && !nestedForm.age.$pristine">La edad debe estar entre 0-99</span>
-	    			</div>
-	    			<div class="col-md-4">
-	    				<input type="text" name="phoneNumber" class="form-control" placeholder="Telefono" ng-model="vm.person.phoneNumber" ng-pattern="/^[0-9]{7,10}$/">
-	    				<span class="error-validation" ng-show="nestedForm.phoneNumber.$invalid && !nestedForm.phoneNumber.$pristine">El numero de telephono debe contener solo numeros</span>	
-	    			</div>
-	    			<div class="col-md-3">
-	    				<input type="email" name="email" class="form-control" placeholder="Email" ng-model="vm.person.email" required>
-	    				<span class="error-validation" ng-show="nestedForm.email.$error.required && !nestedForm.email.$pristine">El email es obligatrio</span>	
-	    				<span class="error-validation" ng-show="nestedForm.email.$error.email && !nestedForm.email.$pristine">El email no es valido</span>
-	    			</div>
-	    			<div>
-	    				<button class="btn btn-primary" type="button" ng-if="!vm.edit" ng-click="vm.addPersonToProject()"><i class="glyphicon glyphicon-plus"></i></button>
-	    			</div>
-    			</div>
-    		</div>
-    		</ng-form>
+    		<div>
+  				<button ng-if="!vm.edit" class="btn btn-primary pull-right" type="button" ng-if="!vm.edit" ng-click="vm.OpenAddPersonModal()">Agregar integrante</button>
+  			</div>
     		<div ng-if="vm.project.team.length > 0">
     			<h2>Grupo</h2>
 	    		<div ng-repeat="p in vm.project.team" class="team-part">
@@ -138,13 +67,13 @@
     						<div class="form-group">
     							<textarea ng-if="vm.calculateAnswerIndex(question.id) == 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" ng-maxlength="140" required></textarea>
     							<textarea ng-if="vm.calculateAnswerIndex(question.id) != 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" required></textarea>
-    							<span class="error-validation" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$error.required && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine">La respuesta es obligatoria</span>
-    							<span class="error-validation" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$invalid && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine && vm.calculateAnswerIndex(question.id) == 0">La respuesta debe tener como maximo 140 caracteres</span>
+    							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$error.required && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine">La respuesta es obligatoria</span>
+    							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$invalid && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine && vm.calculateAnswerIndex(question.id) == 0">La respuesta debe tener como maximo 140 caracteres</span>
     						</div>
     					</div>
     				</div>
     			</div>
-    		<span class="error-validation" ng-show="vm.teamError">Debe haber al menos una persona en el groupo</span>
+    		<span class="help-block" ng-show="vm.teamError">Debe haber al menos una persona en el groupo</span>
     		
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Postular</button>

@@ -1,0 +1,94 @@
+<div class="modal-header">
+ 	<h3 class="modal-title" id="modal-title">Agregar jurados al proyecto</h3>
+</div>
+<div class="modal-body" id="modal-body">
+	 <div class="container-fluid">
+ 		<form name="personForm">
+	 		<div class="row">
+	 			<div class="col-md-8">
+			 		<div class="form-group">
+			 			<div class="row">
+			 				<div class="col-md-2">
+			 					<input type="radio" name="Type" value="uade" ng-model="personType" ng-change="person.type = 'personUade'" ng-required="true">Uade<br>
+							</div>
+							<div class="col-md-2">
+								<input type="radio" name="Type" value="extern" ng-model="personType" ng-change="person.type = 'person'" ng-required="true">Externo<br>
+			 				</div>
+			 			</div>
+			 			<div class="row">
+			  			<div class="col-md-12">
+			 					<span class="help-block" ng-show="personForm.Type.$error.required && !personForm.Type.$pristine">Debe elegir tipo de persona</span>
+			 				</div>
+							</div>
+			 		</div>	
+			 		<div class="form-group">	
+			 			<div class="row">
+			  			<div class="col-md-4">
+			  				<input type="text" class="form-control" name="firstName" placeholder="Nombre" ng-model="person.firstName" required>
+			  				<span class="help-block" ng-show="personForm.firstName.$error.required && !personForm.firstName.$pristine">El nombre es obligatrio</span>
+			  			</div>
+			  			<div class="col-md-4">
+			  				<input type="text" class="form-control" name="lastName" placeholder="Apellido"ng-model="person.lastName" required>
+			  				<span class="help-block" ng-show="personForm.lastName.$error.required && !personForm.lastName.$pristine">El apellido es obligatrio</span>
+			  			</div>
+			  			<div class="col-md-3">
+			  				<input type="text" name="dni" class="form-control" placeholder="DNI" ng-model="person.dni" ng-pattern="/^[0-9]{7,8}$/" required>
+			  				<span class="help-block" ng-show="personForm.dni.$error.required && !personForm.dni.$pristine">El dni es obligatrio</span>
+			  				<span class="help-block" ng-show="personForm.dni.$invalid && !personForm.dni.$pristine">El dni es invalido</span>
+			  			</div>
+			 			</div>
+			 		</div>
+			 		<div class="form-group" ng-if="person.type === 'personUade'">	
+			 			<div class="row">
+			  			<div class="col-md-4">
+			  				<input type="text" name="career" class="form-control" placeholder="Carrera" ng-model="person.career" required>
+			  				<span class="help-block" ng-show="personForm.career.$error.required && !personForm.career.$pristine">Debe ingresar la carrera</span>
+			  			</div>
+			  			<div class="col-md-4">
+			  				<input type="text" name="fileNumber" class="form-control" placeholder="FileNumber" ng-model="person.fileNumber" required>
+			  				<span class="help-block" ng-show="personForm.fileNumber.$error.required && !personForm.fileNumber.$pristine">El legajo es obligatrio</span>
+			  			</div>
+			  			<div class="col-md-3">
+			   			<select class="form-control col-md-6" name="stage" ng-model="person.stage" ng-init="person.stage = stages[0].value" 
+			   			 ng-options="stages.indexOf(stage) as stage for stage in stages" name="stageSelect" required>
+			   			 	<option value="">Eliga una etapa</option> 
+			   			 </select>
+			   			<span class="help-block" ng-show="personForm.stage.$error.required && personForm.stage.$touched">Debe elijir una etapa</span> 
+			  			</div>
+			 			</div>
+			 		</div>
+			 		<div class="form-group" >	
+		 			<div class="row">
+		  			<div class="col-md-4">
+		  				<input type="text" name="age" class="form-control" placeholder="Eded" ng-model="person.age" ng-pattern="/^[0-9]{1,2}$/" required>
+		  				<span class="help-block" ng-show="personForm.age.$error.required && !personForm.age.$pristine">La edad es obligatrio</span>
+		  				<span class="help-block" ng-show="personForm.age.$invalid && !personForm.age.$pristine">La edad debe estar entre 0-99</span>
+		  			</div>
+		  			<div class="col-md-4">
+		  				<input type="text" name="phoneNumber" class="form-control" placeholder="Telefono" ng-model="person.phoneNumber" ng-pattern="/^[0-9]{7,10}$/">
+		  				<span class="help-block" ng-show="personForm.phoneNumber.$invalid && !personForm.phoneNumber.$pristine">El numero de telephono debe contener solo numeros</span>	
+		  			</div>
+		  			<div class="col-md-3">
+		  				<input type="email" name="email" class="form-control" placeholder="Email" ng-model="person.email" required>
+		  				<span class="help-block" ng-show="personForm.email.$error.required && !personForm.email.$pristine">El email es obligatrio</span>	
+		  				<span class="help-block" ng-show="personForm.email.$error.email && !personForm.email.$pristine">El email no es valido</span>
+		  			</div>
+		  			<div>
+		  				<button class="btn btn-primary" type="button" ng-click="addPersonToProject()"><i class="glyphicon glyphicon-plus"></i></button>
+		  			</div>
+		 			</div>
+		 		</div>
+	 			</div>
+	 			<div class="col-md-4">
+	 				<div class="row" ng-repeat="person in team">
+	 					<div>{{person.firstName + ' ' + person.lastName}}</div>
+	 				</div>
+	 			</div>
+	 		</div>
+ 		</form>
+ </div>
+<div class="modal-footer pull left">
+	<button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+	<button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>
+ 

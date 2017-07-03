@@ -78,53 +78,6 @@
     		})[0].questionAnswer;
     	}
     	
-        vm.addPersonToProject = function(){
-        	if(personIsValid()){
-	        	vm.project.team.push(angular.copy(vm.person));
-	        	vm.person = {};
-	        	vm.personType = undefined;
-	        	setPersonInputsPristine();
-        	}
-        }
-        
-        function setPersonInputsPristine(){
-        	$scope.nestedForm.Type.$setPristine();
-        	$scope.nestedForm.firstName.$setPristine();
-			$scope.nestedForm.lastName.$setPristine();
-			$scope.nestedForm.dni.$setPristine();
-			$scope.nestedForm.age.$setPristine();
-			$scope.nestedForm.phoneNumber.$setPristine();
-			$scope.nestedForm.email.$setPristine();
-        }
-        
-        function personIsValid(){
-        	if(vm.person.type){
-        		var invalid = false;
-        		if(!$scope.nestedForm.firstName.$valid || !$scope.nestedForm.lastName.$valid || !$scope.nestedForm.dni.$valid ||
-        				!$scope.nestedForm.email.$valid || !$scope.nestedForm.phoneNumber.$valid || !$scope.nestedForm.age.$valid){
-        			$scope.nestedForm.firstName.$setDirty();
-        			$scope.nestedForm.lastName.$setDirty();
-        			$scope.nestedForm.dni.$setDirty();
-        			$scope.nestedForm.age.$setDirty();
-        			$scope.nestedForm.phoneNumber.$setDirty();
-        			$scope.nestedForm.email.$setDirty();
-        			invalid = true;
-        		}
-        		if((vm.person.type == 'personUade') && (!$scope.nestedForm.fileNumber.$valid || !$scope.nestedForm.career.$valid ||
-        				vm.person.stage == undefined)){
-        			$scope.nestedForm.fileNumber.$setDirty();
-        			$scope.nestedForm.career.$setDirty();
-        			$scope.nestedForm.stage.$setTouched();
-        			return false;
-        		}
-        		return !invalid ? true : false; 
-        	}
-        	else {
-        		$scope.nestedForm.Type.$setDirty();
-        		return false;
-        	}
-        }
-        
         vm.deletePersonFromProject = function(index){
         	vm.project.team.splice(index);
         }
@@ -157,6 +110,120 @@
         
         vm.navigateToEvaluation = function(){
         	$state.go('evaluation',{projectId:$state.params.id});
+        }
+        
+        
+        vm.OpenAddPersonModal =  function(){
+        	var scope = $scope.$new(true);
+        	scope.team = vm.project.team ? angular.copy(vm.project.team) : [];
+    		var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            scope:scope,
+            backdrop: 'static',
+            size:'lg',
+            templateUrl: 'app/components/modal/projectAddPerson.html',
+            controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){            	
+            	$scope.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
+            	$scope.addPersonToProject = function(){
+                	if(personIsValid()){
+        	        	$scope.team.push($scope.person);
+        	        	$scope.person = {};
+        	        	$scope.personType = undefined;
+        	        	setPersonInputsPristine();
+                	}
+                }
+                
+                function setPersonInputsPristine(){
+                	$scope.personForm.Type.$setPristine();
+                	$scope.personForm.firstName.$setPristine();
+        			$scope.personForm.lastName.$setPristine();
+        			$scope.personForm.dni.$setPristine();
+        			$scope.personForm.age.$setPristine();
+        			$scope.personForm.phoneNumber.$setPristine();
+        			$scope.personForm.email.$setPristine();
+                }
+                
+                function personIsValid(){
+                	if($scope.person.type){
+                		var invalid = false;
+                		if(!$scope.personForm.firstName.$valid || !$scope.personForm.lastName.$valid || !$scope.personForm.dni.$valid ||
+                				!$scope.personForm.email.$valid || !$scope.personForm.phoneNumber.$valid || !$scope.personForm.age.$valid){
+                			$scope.personForm.firstName.$setDirty();
+                			$scope.personForm.lastName.$setDirty();
+                			$scope.personForm.dni.$setDirty();
+                			$scope.personForm.age.$setDirty();
+                			$scope.personForm.phoneNumber.$setDirty();
+                			$scope.personForm.email.$setDirty();
+                			invalid = true;
+                		}
+                		if((vm.person.type == 'personUade') && (!$scope.personForm.fileNumber.$valid || !$scope.personForm.career.$valid ||
+                				vm.person.stage == undefined)){
+                			$scope.personForm.fileNumber.$setDirty();
+                			$scope.personForm.career.$setDirty();
+                			$scope.personForm.stage.$setTouched();
+                			return false;
+                		}
+                		return !invalid ? true : false; 
+                	}
+                	else {
+                		$scope.personForm.Type.$setDirty();
+                		return false;
+                	}
+                }
+                
+                $scope.ok = function () {
+            		if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
+	            		$uibModalInstance.close($scope.team);
+	            		scope.$destroy();
+            		}
+            		else
+            			$scope.raiseError = true;
+            	};
+            	
+            	$scope.cancel = function(){
+            		scope.$destroy();
+            		$scope.$dismiss();
+            	}
+            	
+            }],
+            resolve: {
+              team: function () {
+                return $scope.team;
+              }
+            }
+          });
+    		return modalInstance;
+        }
+        
+        function rejectModal (){
+        	var scope = $scope.$new(true);
+        	scope.project = angular.copy(vm.project);
+    		var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            scope:scope,
+            backdrop: 'static',
+            size:'lg',
+            templateUrl: 'app/components/modal/projectRejectModal.html',
+            controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){      
+            	$scope.ok = function () {
+            		$uibModalInstance.close($scope.comment);
+	            	scope.$destroy();
+            	}
+            	
+            	$scope.cancel = function(){
+            		scope.$destroy();
+            		$scope.$dismiss();
+            	}
+            }],
+            resolve: {
+              project: function () {
+                return $scope.comment;
+              }
+            }
+          });
+    		return modalInstance;
         }
         
         
