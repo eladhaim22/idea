@@ -5,9 +5,9 @@
         .module('ideaApp')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+    stateConfig.$inject = ['$stateProvider','$sceProvider'];
 
-    function stateConfig($stateProvider) {
+    function stateConfig($stateProvider,$sceProvider) {
         $stateProvider.state('project', {
             parent: 'app',
             url: '/project/:id',
@@ -22,5 +22,6 @@
                 }
             }
         });
+        $sceProvider.enabled(false);
     }
 })();

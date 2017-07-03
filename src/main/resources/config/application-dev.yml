@@ -50,6 +50,11 @@ spring:
         port: 587
         username: centro.emprendedores.uade@gmail.com
         password: adminuade
+        tls: true
+        properties.mail.smtp:
+            auth: true
+            starttls.enable: true
+            ssl.trust: smtp.gmail.com
     messages:
         cache-seconds: 1
     thymeleaf:

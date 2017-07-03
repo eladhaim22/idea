@@ -5,39 +5,68 @@
         .module('ideaApp')
         .controller('ProjectsController', ProjectsController);
 
-    ProjectsController.$inject = ['$scope', 'Principal', 'LoginService', '$state','projectService','periodService','$q'];
+    ProjectsController.$inject = ['$scope', 'Principal', 'LoginService', '$state','projectService','periodService','$q','evaluationService'];
 
-    function ProjectsController ($scope, Principal, LoginService, $state,projectService,periodService,$q) {
+    function ProjectsController ($scope, Principal, LoginService, $state,projectService,periodService,$q,evaluationService) {
     	var vm = this;
-    	
+    	var UserIdentity;
     	function intialize(period_id){
-    		var promises = {
-    					projects : projectService.getAllWithPeriod(period_id)}
-    		Principal.hasAuthority('ROLE_ADMIN').then(function(admin){
-    			if(admin){
-    				promises.periods = periodService.getAll()
-    			}
-    			$q.all(promises).then(function(data){
-        			vm.projects = data.projects;
-        			angular.forEach(vm.projects,function(project){
-        				project.createdDate = new moment(project.createdDate).format("DD/MM/YYYY");
-        			});
-        			if (admin){
-    	    			var defaultPeriod = data.periods.splice(_.indexOf(data.periods,_.filter(data.periods,function(period){return period.active})))[0];
-    	    			vm.periods = _.sortBy(data.periods,'startingDate');
-    	    			vm.periods.unshift(defaultPeriod);
-    	    			angular.forEach(vm.periods,function(period){
-    	    				period.startingDate = period.startingDate.format("DD/MM/YYYY");
-    	    				period.endingDate = period.endingDate.format("DD/MM/YYYY");
-    	    			});
-    	    			vm.selectedPeriod = !vm.selectedPeriod ? defaultPeriod : vm.selectedPeriod; 
-        			}
-        		},function(error){
-        			
-        		});
+			Principal.identity().then(function(identity){
+				UserIdentity = identity;
+				var promises = {
+						projects : projectService.getAllWithPeriod(period_id)}
+				if(vm.hasAuthority("ROLE_ADMIN")){
+					promises.periods = periodService.getAll();
+				}
+				else {
+					if(vm.hasAuthority("ROLE_REFERRE")){
+						promises.evaluations = evaluationService.get("/ByReferre");
+					}
+				}
+				$q.all(promises).then(function(data){
+	    			vm.projects = data.projects;
+	    			if (vm.hasAuthority("ROLE_ADMIN")){
+		    			var defaultPeriod = data.periods.splice(_.indexOf(data.periods,_.filter(data.periods,function(period){return period.active})))[0];
+		    			vm.periods = _.sortBy(data.periods,'startingDate');
+		    			vm.periods.unshift(defaultPeriod);
+		    			angular.forEach(vm.periods,function(period){
+		    				period.startingDate = period.startingDate.format("DD/MM/YYYY");
+		    				period.endingDate = period.endingDate.format("DD/MM/YYYY");
+		    			});
+		    			vm.selectedPeriod = !vm.selectedPeriod ? defaultPeriod : vm.selectedPeriod; 
+	    			}
+	    			else{
+	    				if(vm.hasAuthority("ROLE_REFERRE")){
+	    					var evaluations = data.evaluations;
+	    					_.forEach(vm.projects,function(project){
+	    	    				if(_.any(project.evaluationsIds,function(e){return _.contains(_.map(evaluations,"id"),e)})){
+	    	    					project.hasEvaluated = true;
+	    	    				}
+	    	    				else
+	    	    					project.hasEvaluated = false;
+	    	    			});
+	    				}
+	    			}
+	    		},function(error){
+	    			
+	    		});
 			},function(error){
 				
 			});
+    	}
+    	
+    	vm.hasAuthority = function(role){
+    		return _.contains(UserIdentity.authorities,role);
+    	}
+    	
+    	vm.hasAnyAuthority = function(roles){
+    		var hasAuthority = false;
+    		_.forEach(roles,function(role){
+    			if(!hasAuthority){
+    				hasAuthority = _.contains(UserIdentity.authorities,role);
+    			}
+    		});
+    		return hasAuthority;
     	}
     	
     	vm.changePeriod = function(){

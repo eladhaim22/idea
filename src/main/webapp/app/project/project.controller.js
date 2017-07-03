@@ -9,15 +9,7 @@
 
     function ProjectController ($scope,$state,projectService,User,$uibModal,templateService,$q) {
     	var vm = this;
-    	vm.stages = [
-    		{label:'1er año',value:0},
-    		{label:'2do año',value:1},
-    		{label:'3er año',value:2},
-    		{label:'4to año',value:3},
-    		{label:'5to año',value:4},
-    		{label:'Graduado',value:5},
-    		{label:'Post Grado',value:6}
-    	];
+    	vm.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
     	vm.person ={};
     	vm.project = {};
     	vm.project.team = [];
@@ -66,11 +58,16 @@
 		        });
     		}
     		else if(state == 'Rejected'){
-    			projectService.changeState(vm.project.id,null,_.indexOf(states,state)).then(function(data){
-	        		$state.go('projects');
-	        	},function(error){
-	        		console.log('error');
-	        	});
+    			rejectModal().result.then(function(comment){
+    				vm.project.comment = comment;
+    				projectService.changeState(vm.project.id,null,_.indexOf(states,state)).then(function(data){
+    	        		$state.go('projects');
+    	        	},function(error){
+    	        		console.log('error');
+    	        	});
+    			},function(error){
+    				console.log('');
+    			});
     		}
     	}
     	
@@ -91,42 +88,39 @@
         }
         
         function setPersonInputsPristine(){
-        	$scope.form.Type.$setPristine();
-        	$scope.form.firstName.$setPristine();
-			$scope.form.lastName.$setPristine();
-			$scope.form.dni.$setPristine();
-			$scope.form.age.$setPristine();
-			$scope.form.phoneNumber.$setPristine();
-			$scope.form.email.$setPristine();
-			$scope.form.fileNumber.$setPristine();
-			$scope.form.career.$setPristine();
-			$scope.form.stage.$setPristine();
+        	$scope.nestedForm.Type.$setPristine();
+        	$scope.nestedForm.firstName.$setPristine();
+			$scope.nestedForm.lastName.$setPristine();
+			$scope.nestedForm.dni.$setPristine();
+			$scope.nestedForm.age.$setPristine();
+			$scope.nestedForm.phoneNumber.$setPristine();
+			$scope.nestedForm.email.$setPristine();
         }
         
         function personIsValid(){
         	if(vm.person.type){
         		var invalid = false;
-        		if(!$scope.form.firstName.$valid || !$scope.form.lastName.$valid || !$scope.form.dni.$valid ||
-        				!$scope.form.email.$valid || !$scope.form.phoneNumber.$valid || !$scope.form.age.$valid){
-        			$scope.form.firstName.$setDirty();
-        			$scope.form.lastName.$setDirty();
-        			$scope.form.dni.$setDirty();
-        			$scope.form.age.$setDirty();
-        			$scope.form.phoneNumber.$setDirty();
-        			$scope.form.email.$setDirty();
+        		if(!$scope.nestedForm.firstName.$valid || !$scope.nestedForm.lastName.$valid || !$scope.nestedForm.dni.$valid ||
+        				!$scope.nestedForm.email.$valid || !$scope.nestedForm.phoneNumber.$valid || !$scope.nestedForm.age.$valid){
+        			$scope.nestedForm.firstName.$setDirty();
+        			$scope.nestedForm.lastName.$setDirty();
+        			$scope.nestedForm.dni.$setDirty();
+        			$scope.nestedForm.age.$setDirty();
+        			$scope.nestedForm.phoneNumber.$setDirty();
+        			$scope.nestedForm.email.$setDirty();
         			invalid = true;
         		}
-        		if((vm.person.type == 'personUade') && (!$scope.form.fileNumber.$valid || !$scope.form.career.$valid ||
-        				!vm.person.stage)){
-        			$scope.form.fileNumber.$setDirty();
-        			$scope.form.career.$setDirty();
-        			$scope.form.stage.$setTouched();
+        		if((vm.person.type == 'personUade') && (!$scope.nestedForm.fileNumber.$valid || !$scope.nestedForm.career.$valid ||
+        				vm.person.stage == undefined)){
+        			$scope.nestedForm.fileNumber.$setDirty();
+        			$scope.nestedForm.career.$setDirty();
+        			$scope.nestedForm.stage.$setTouched();
         			return false;
         		}
         		return !invalid ? true : false; 
-    	}
+        	}
         	else {
-        		$scope.form.Type.$setDirty();
+        		$scope.nestedForm.Type.$setDirty();
         		return false;
         	}
         }
@@ -164,6 +158,7 @@
         vm.navigateToEvaluation = function(){
         	$state.go('evaluation',{projectId:$state.params.id});
         }
+        
         
         function openModal (){
         	var scope = $scope.$new(true);
@@ -221,6 +216,36 @@
             resolve: {
               project: function () {
                 return $scope.project;
+              }
+            }
+          });
+    		return modalInstance;
+        }
+        
+        function rejectModal (){
+        	var scope = $scope.$new(true);
+        	scope.project = angular.copy(vm.project);
+    		var modalInstance = $uibModal.open({
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            scope:scope,
+            backdrop: 'static',
+            size:'lg',
+            templateUrl: 'app/components/modal/projectRejectModal.html',
+            controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){      
+            	$scope.ok = function () {
+            		$uibModalInstance.close($scope.comment);
+	            	scope.$destroy();
+            	}
+            	
+            	$scope.cancel = function(){
+            		scope.$destroy();
+            		$scope.$dismiss();
+            	}
+            }],
+            resolve: {
+              project: function () {
+                return $scope.comment;
               }
             }
           });

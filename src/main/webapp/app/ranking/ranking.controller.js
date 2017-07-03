@@ -12,7 +12,7 @@
     	
     	function intialize(){
     		rankingService.getAll().then(function(ranking){
-    			vm.ranking = _.sortBy(ranking,'average');
+    			vm.ranking = _.sortBy(ranking,'average').reverse();
     		},function(error){
     			
     		});

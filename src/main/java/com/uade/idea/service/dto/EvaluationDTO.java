@@ -1,5 +1,6 @@
 package com.uade.idea.service.dto;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,12 +29,33 @@ public class EvaluationDTO extends AbstractAuditingEntity{
 
     private Long projectId;
     
+    private Instant createdDate;
+    
+    private String createdBy;
+    
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+	public String getCreatedBy() {
+	        return createdBy;
+    }
+
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Instant getCreatedDate() {
+        return createdDate;
+    }
+	
+	public void setCreatedBy(String createdBy){
+		this.createdBy = createdBy;
 	}
 	
 	public Set<AnswerDTO> getAnswers() {
@@ -51,6 +73,5 @@ public class EvaluationDTO extends AbstractAuditingEntity{
 	public void setProjectId(Long projectId) {
 		this.projectId = projectId;
 	}
-	
 	
 }

@@ -20,6 +20,7 @@ import com.uade.idea.service.mapper.ProjectMapper;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -65,13 +66,14 @@ public class EvaluationService {
         	//project.getEvaluations().add(evaluation);
         	evaluationRepository.save(evaluation);
         	Set<User> referres = project.getUsers().stream().filter(u -> u.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.REFERRE))).collect(Collectors.toSet());
-        	if(referres.stream().anyMatch(referre -> project.getEvaluations().stream().anyMatch(e -> e.getCreatedBy().equals(referre.getLogin())))){
+        	List<Evaluation> evaluations =  evaluationRepository.findAllByProjectId(evaluationDTO.getProjectId());
+        	if(referres.stream().allMatch(r -> evaluations.stream().anyMatch(e -> e.getCreatedBy().compareTo(r.getLogin()) == 0))){
         		project.getStates().forEach(state -> state.setActive(false));
         		State state = new State();
             	state.setActive(true);
             	state.setStatus(Status.FinalStage);
         		project.getStates().add(state);
-        	}		
+        	}	
         	projectRepository.save(project);
     	}
     	else {
@@ -87,6 +89,12 @@ public class EvaluationService {
     public Set<EvaluationDTO> GetByProjectId(long id){
     	log.debug("Getting evaluations by project id:{}",id);
     	return evaluationRepository.findAllByProjectId(id).stream().map(ev -> evaluationMapper.ToDTO(ev)).collect(Collectors.toSet());
+    }
+    
+    public Set<EvaluationDTO> GetByUser(){
+    	User user = userService.getUserWithAuthorities();
+    	log.debug("Getting evaluations by user id:{}",user.getLogin());
+    	return evaluationRepository.findAllByCreatedBy(user.getLogin()).stream().map(ev -> evaluationMapper.ToDTO(ev)).collect(Collectors.toSet());
     }
     
 }

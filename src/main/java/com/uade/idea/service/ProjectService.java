@@ -114,7 +114,7 @@ public class ProjectService {
     			return projectMapper.ToDTO(project);
     		}
     		else { 
-    			if(project.getCreatedBy() == user.getLogin()){
+    			if(project.getCreatedBy().compareTo(user.getLogin()) == 0){
     				return projectMapper.ToDTO(project);
     			}
     		}
@@ -131,19 +131,26 @@ public class ProjectService {
     		return Sets.newHashSet(projectRepository.findAll()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet());
     	}
     	else {
-    		return Sets.newConcurrentHashSet(projectRepository.findByUserId(user.getId()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet()));
+    		if(user.getAuthorities().stream().anyMatch(auth -> new String(auth.getName()).equals(AuthoritiesConstants.REFERRE))){
+    			return Sets.newConcurrentHashSet(projectRepository.findAllByStatesActiveTrueAndUsersIdAndStatesStatusLike(user.getId(),Status.valueOf("PreSelected"))
+    					.stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet()));
+    		}
+    		else{
+    			return Sets.newConcurrentHashSet(projectRepository.findAllByUsersId(user.getId()).stream().map(project -> projectMapper.ToDTO(project)).collect(Collectors.toSet()));
+    		}
     	}
     }
     
     public List<RankingDTO> GetQualifiedProject(){
-    	this.setSessionFilter();
-    	List<Project> projects = new ArrayList<Project>(); 
-		 projects = projectRepository.findByQualifiedProject();
+    	 this.setSessionFilter();
+    	 List<Project> projects = new ArrayList<Project>();
+		 projects = projectRepository.findAllByStatesActiveTrueAndStatesStatusLike(Status.valueOf("FinalStage"));
 		 List<RankingDTO> ranking = new ArrayList<RankingDTO>();
 		 for(Project project : projects){
 			 RankingDTO r = new RankingDTO();
 			 r.setProject(projectMapper.ToDTO(project));
-			 r.setAverage(project.getEvaluations().stream().mapToDouble(e -> e.getAnswers().stream().mapToDouble(a -> Double.parseDouble(a.getQuestionAnswer())).sum()).sum() / ((double)project.getEvaluations().stream().findFirst().get().getAnswers().size()));
+			 r.setAverage(project.getEvaluations().stream().mapToDouble(e -> e.getAnswers().stream().mapToDouble(a -> Double.parseDouble(a.getQuestionAnswer())).sum()).sum() /
+					 ((double)project.getEvaluations().stream().findFirst().get().getAnswers().size()) /  ((double)project.getEvaluations().size()));
 			 ranking.add(r);
 		 }
 		 return ranking;

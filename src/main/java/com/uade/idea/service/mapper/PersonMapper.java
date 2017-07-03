@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.uade.idea.domain.Person;
 import com.uade.idea.domain.PersonUade;
+import com.uade.idea.domain.Stage;
 import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.service.dto.PersonDTO;
 import com.uade.idea.service.dto.PersonUadeDTO;
@@ -38,7 +39,7 @@ public class PersonMapper {
 	        person.setAge( personDTO.getAge() );
     		((PersonUade)person).setFileNumber(((PersonUadeDTO) personDTO).getFileNumber());
     		((PersonUade)person).setCareer(((PersonUadeDTO) personDTO).getCareer());
-    		((PersonUade)person).setStage(((PersonUadeDTO) personDTO).getStage());
+    		((PersonUade)person).setStage(Stage.values()[((PersonUadeDTO) personDTO).getStage()]);
     	}
     	else{
 	        person.setFirstName( personDTO.getFirstName() );
@@ -63,7 +64,7 @@ public class PersonMapper {
 	        personUadeDTO.setAge( person.getAge() );
     		personUadeDTO.setFileNumber(((PersonUade) person).getFileNumber());
 			personUadeDTO.setCareer(((PersonUade) person).getCareer());
-			personUadeDTO.setStage(((PersonUade) person).getStage());
+			personUadeDTO.setStage(((PersonUade) person).getStage().ordinal());
 	        return personUadeDTO;
     	}
     	else{

@@ -100,7 +100,12 @@ public class EvaluationResource {
         }
     }
     
-    
-    
-  
+    @GetMapping("/ByReferre")
+    @Timed
+    @Secured(AuthoritiesConstants.REFERRE)
+    public ResponseEntity GetEvaluationsByLogin() throws URISyntaxException {
+    	log.debug("REST request to get evaluation by referre : {}");
+    	Set<EvaluationDTO> evaluations = evaluationService.GetByUser();
+    	return new ResponseEntity<>(evaluations,HttpStatus.OK);
+    }
 }

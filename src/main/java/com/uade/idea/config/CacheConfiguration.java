@@ -37,14 +37,20 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            /*cm.createCache(com.uade.idea.domain.User.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(com.uade.idea.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(com.uade.idea.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             cm.createCache(com.uade.idea.domain.PersistentToken.class.getName(), jcacheConfiguration);
             cm.createCache(com.uade.idea.domain.User.class.getName() + ".persistentTokens", jcacheConfiguration);
-            //cm.createCache(com.uade.idea.domain.Project.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Project.class.getName(), jcacheConfiguration);
             cm.createCache(com.uade.idea.domain.Person.class.getName(),jcacheConfiguration);
-            */
+            cm.createCache(com.uade.idea.domain.PersonUade.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Answer.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Evaluation.class.getName(),jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Period.class.getName(),jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Question.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.State.class.getName(), jcacheConfiguration);
+            cm.createCache(com.uade.idea.domain.Template.class.getName(),jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

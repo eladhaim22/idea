@@ -17,10 +17,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="Periods")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Period implements Serializable {
 
     private static final long serialVersionUID = 1L;

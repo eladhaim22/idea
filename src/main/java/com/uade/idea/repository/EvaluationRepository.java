@@ -13,4 +13,6 @@ import com.uade.idea.domain.Evaluation;
  */
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 	List<Evaluation> findAllByProjectId(Long projectId);
+	
+	List<Evaluation> findAllByCreatedBy(String login);
 }

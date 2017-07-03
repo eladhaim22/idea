@@ -49,6 +49,8 @@ public class EvaluationMapper {
     	evaluationDto.setId(evaluation.getId());
     	evaluationDto.setProjectId(evaluation.getProject().getId());
     	evaluationDto.setAnswers(evaluation.getAnswers().stream().map(answer -> answerMapper.ToDTO(answer)).collect(Collectors.toSet()));
+    	evaluationDto.setCreatedBy(evaluation.getCreatedBy());
+    	evaluationDto.setCreatedDate(evaluation.getCreatedDate());
     	return evaluationDto;
     }
 }

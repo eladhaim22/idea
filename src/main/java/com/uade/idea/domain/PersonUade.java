@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 
 
 
@@ -14,7 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @DiscriminatorValue("personUade")
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PersonUade extends Person {    
 
 	private static final long serialVersionUID = 1L;

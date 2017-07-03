@@ -1,6 +1,6 @@
 <div ng-cloak>
-    <div class="row" ng-repeat="ranking in vm.ranking">
-    	<div class="col-md-6">{{ranking.project.title}}</div>
-    	<div class="col-md-3">{{ranking.average}}</div>
+    <div class="row" style="margin-bottom:5px;" ng-repeat="ranking in vm.ranking">
+    	<div class="col-md-4">{{ranking.project.title}}</div>
+    	<div class="col-md-8"><div class="btn btn-primary" ng-style="{'width':ranking.average * 10 + '%'}">{{ranking.average}}</div></div>
     </div>
 </div>

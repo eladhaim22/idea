@@ -10,9 +10,9 @@
 
 		projectService.getAllWithPeriod = function(period_id){
 			if(period_id)
-				return restService.get("/api/project",{headers: {Period_Id: period_id}});
+				return projectService.get("",{headers: {Period_Id: period_id}});
 			else
-				return restService.get("/api/project");
+				return projectService.get("");
 		}
 		
 		projectService.fill = entityServiceFactory.buildFill(null, function () {

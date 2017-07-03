@@ -5,7 +5,8 @@ CREATE TABLE Projects(
 	created_date datetime NOT NULL,
 	last_modified_by varchar(50),
 	last_modified_date datetime,
-	period_id bigint NOT NULL
+	period_id bigint NOT NULL,
+	comment varchar(max)
 )
 
 ALTER TABLE Projects

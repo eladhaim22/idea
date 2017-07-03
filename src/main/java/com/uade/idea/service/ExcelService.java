@@ -105,9 +105,10 @@ public class ExcelService{
 	    	   sheet.addCell(new Label(7, i,person.getEmail()));
 	    	   if(person instanceof PersonUade){
 	    		   sheet.addCell(new Label(8, i,((PersonUade)person).getFileNumber()));
-	    		   sheet.addCell(new Label(8, i,((PersonUade)person).getCareer()));
-	    		   sheet.addCell(new Label(8, i,((PersonUade)person).getStage().toString()));
+	    		   sheet.addCell(new Label(9, i,((PersonUade)person).getCareer()));
+	    		   sheet.addCell(new Label(10, i,((PersonUade)person).getStage().toString()));
 	    	   }
+	    	   i++;
     	   }
        }
     }

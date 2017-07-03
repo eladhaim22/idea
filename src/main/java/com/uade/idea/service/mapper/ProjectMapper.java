@@ -60,6 +60,7 @@ public class ProjectMapper {
 		project.getStates().addAll(source.getStates().stream().map(state -> stateMapper.ToModel(state)).collect(Collectors.toSet()));
 		project.getAnswers().clear();
 		project.getAnswers().addAll(source.getAnswers().stream().map(answerDto -> answerMapper.ToModel(answerDto)).collect(Collectors.toSet()));
+		project.setComment(source.getComment());
 		return project;
 	}
 	
@@ -74,6 +75,7 @@ public class ProjectMapper {
 		projectDto.setStates(source.getStates().stream().map(state -> stateMapper.ToDto(state)).collect(Collectors.toSet()));
 		projectDto.setAnsewrs(source.getAnswers().stream().map(answer -> answerMapper.ToDTO(answer)).collect(Collectors.toSet()));
 		projectDto.setEvaluationsIds(source.getEvaluations().stream().map(evaluation -> evaluation.getId()).collect(Collectors.toSet()));
+		projectDto.setComment(source.getComment());
 		return projectDto;
 	}	
 }

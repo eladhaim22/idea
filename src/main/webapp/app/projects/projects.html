@@ -14,7 +14,8 @@
 		  		<th>Nombre de Proyecto</th> 
 		  		<th>Fecha de presentacion</th> 
 		  		<th>Estado</th>
-		  		<th>Opciones</th> 
+		  		<th>Opciones</th>
+		  		<th ng-if="vm.hasAuthority('ROLE_ADMIN')">Evaluaciones</th> 
 		  	</tr> 
 		 </thead>
 		 <tbody>
@@ -23,8 +24,10 @@
 		  		<td class="col-md-3">{{project.title}}</td>
 		    	<td>{{project.createdDate}}</td>
 		    	<td>{{$parent.vm.getActiveStatus(project)}}</td>
-		    	<td has-authority="ROLE_REFEREE" ng-if="vm.projectStatus(project) == PreSelected" ng-click="vm.navigateToProject(project.id)">Evaluar</td>
-		    	<td has-any-authority="ROLE_USER,ROLE_ADMIN" ng-click="vm.navigateToProject(project.id)">Detalles</td>
+		    	<td ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && !project.hasEvaluated" ng-click="vm.navigateToProject(project.id)">Evaluar</td>
+		    	<td ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && project.hasEvaluated"><span class="label label-primary">Evaluado</span></td>
+		    	<td ng-if="vm.hasAnyAuthority(['ROLE_ADMIN','ROLE_USER'])" ng-click="vm.navigateToProject(project.id)">Detalles</td>
+		    	<td ng-if="vm.hasAuthority('ROLE_ADMIN')"><div evaluation-chart="project"></div></td>
 		  	</tr>
 	  	</tbody>
 	</table>

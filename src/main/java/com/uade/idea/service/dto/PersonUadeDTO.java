@@ -14,7 +14,7 @@ public class PersonUadeDTO extends PersonDTO{
     
    	private String career;
     
-    private Stage stage;
+    private int stage;
 	
     public PersonUadeDTO() {
         // Empty constructor needed for Jackson.
@@ -38,11 +38,11 @@ public class PersonUadeDTO extends PersonDTO{
 		this.career = career;
 	}
 
-	public Stage getStage() {
+	public int getStage() {
 		return stage;
 	}
 
-	public void setStage(Stage stage) {
+	public void setStage(int stage) {
 		this.stage = stage;
 	}
 }

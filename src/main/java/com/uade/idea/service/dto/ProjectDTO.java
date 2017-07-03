@@ -38,7 +38,9 @@ public class ProjectDTO {
     
     private Set<Long> evaluationsIds;
     
-    public ProjectDTO() {
+    private String comment;
+    
+	public ProjectDTO() {
         // Empty constructor needed for Jackson.
     }
 
@@ -118,5 +120,13 @@ public class ProjectDTO {
 	public Set<Long> getEvaluationsIds() {
 		return evaluationsIds;
 	}
-		
+	
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	
 }

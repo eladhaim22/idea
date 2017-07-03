@@ -7,10 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="states")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class State extends AbstractAuditingEntity {
 	
     private static final long serialVersionUID = 1L;

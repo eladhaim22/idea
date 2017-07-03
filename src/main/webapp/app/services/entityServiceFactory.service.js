@@ -49,9 +49,9 @@
 			return entityPromise;
 		}
 
-		function defaultGet(criteria, entityService) {
+		function defaultGet(criteria, entityService,config) {
 			var url = entityService.baseUrl() + entityService.parseCriteria(criteria);
-			var getPromise = restService.get(url);
+			var getPromise = config ? restService.get(url,config) : restService.get(url);
 			return entityService.fill(getPromise);
 		}
 
@@ -163,8 +163,8 @@
 				return defaultBaseUrl(entityServiceDef);
 			};
 
-			entityService.get = function (criteria) {
-				return defaultGet(criteria, entityService);
+			entityService.get = function (criteria,config) {
+				return defaultGet(criteria, entityService,config);
 			};
 
 			entityService.getAll = function (fromCache) {

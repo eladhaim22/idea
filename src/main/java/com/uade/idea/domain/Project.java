@@ -30,7 +30,7 @@ import org.hibernate.annotations.*;
 	@Filter(name="getProjectsOfActivePeriod",condition="id in (select projects.id from projects where projects.period_id = (select periods.id from periods where periods.active = 1))"),
 	@Filter(name="getProjectsByPeriod", condition="id in (select projects.id from projects where projects.period_id = :period_id)")
 })
-// @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Project extends AbstractAuditingEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -78,7 +78,9 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	@JoinColumn(name = "project_id", nullable = false, insertable = false, updatable = false)
 	private Set<Evaluation> evaluations = new HashSet<>();
 
-	@OneToMany
+	@Column(name = "comment")
+	private String comment;
+	
 	public Set<User> getUsers() {
 		return users;
 	}
@@ -142,4 +144,13 @@ public class Project extends AbstractAuditingEntity implements Serializable {
 	public void setPeriod(Period period) {
 		this.period = period;
 	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	
 }
