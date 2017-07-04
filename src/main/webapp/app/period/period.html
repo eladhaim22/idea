@@ -33,6 +33,8 @@
 			        </p>
 			    </div>
 	        </div>
+	        <div ng-if="vm.raiseError" class="alert alert-danger">La fecha de inicio debe ser anterior a la fecha de presentacion y la fecha de presentacion debe ser anterior a la 
+	        fecha de final</div>
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Guardar</button>
     		</div>

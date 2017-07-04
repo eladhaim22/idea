@@ -343,13 +343,21 @@ ui bootstrap tweaks
 
 .section{
 	font-size:18px;
+	text-decoration: underline;
 }
 
 .subsection{
-	font-size:16px;
+	font-size:14px;
 }
 
 .help-block{
 	margin:0px;
+}
+.customprogress{
+	height:34px;
+}
+.customprogress .progress-bar span{
+	line-height: 17px;
+	display:block;
 }
 

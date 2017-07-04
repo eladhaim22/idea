@@ -66,6 +66,9 @@
 	    			
 	    		});
 	    	}
+	    	else{
+	    		vm.raiseError = true;
+	    	}
 	    }
 	    	
     	intialize();

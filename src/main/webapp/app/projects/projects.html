@@ -1,10 +1,23 @@
 <div ng-cloak>
-	<div class="row">
-		<div class="col-md-offset-9 col-md-3" has-authority="ROLE_ADMIN">
+	<div class="row" has-authority="ROLE_ADMIN">
+		<div class="col-md-3">
+			 <select ng-model="vm.status" class="form-control" ng-change="vm.changeList()" 
+				ng-options="status as status.label for status in vm.projectCounter track by vm.projectCounter.indexOf(status)">
+				<option value="">Todos los estados</option>
+			</select>
+		</div>		 
+		<div class="col-md-3">
 			<select ng-model="vm.selectedPeriod" class="form-control" ng-change="vm.change()" 
 				ng-options="period as period.startingDate + '-' + period.endingDate for period in vm.periods track by period.id">
-				<!--  >option ng-repeat="period in vm.periods" value={{period.id}}>{{period.startingDate + "-" + period.endingDate}}</option--> 
 			</select>
+		</div>
+		<div class="col-md-6">
+			<div class="progress customprogress">
+			  <div ng-repeat="stateCounter in vm.projectCounter" ng-class="'progress-bar progress-bar-' + stateCounter.class" ng-style="{'width': stateCounter.count / vm.projects.length * 100 + '%'}">
+			    <span>{{stateCounter.label}}</span>
+			    <span>{{stateCounter.count}}</span>
+			  </div>
+			</div>
 		</div>
 	</div>
 	<table class="table table-striped">
@@ -19,16 +32,21 @@
 		  	</tr> 
 		 </thead>
 		 <tbody>
-		  	<tr ng-repeat="project in vm.projects">
+		  	<tr ng-repeat="project in vm.paginatedProjects">
 		  		<td>{{$index}}</td>
 		  		<td class="col-md-3">{{project.title}}</td>
 		    	<td>{{project.createdDate}}</td>
 		    	<td>{{$parent.vm.getActiveStatus(project)}}</td>
-		    	<td ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && !project.hasEvaluated" ng-click="vm.navigateToProject(project.id)">Evaluar</td>
-		    	<td ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && project.hasEvaluated"><span class="label label-primary">Evaluado</span></td>
-		    	<td ng-if="vm.hasAnyAuthority(['ROLE_ADMIN','ROLE_USER'])" ng-click="vm.navigateToProject(project.id)">Detalles</td>
+		    	<td>
+		    		<div style="outline:none" ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && !project.hasEvaluated" ng-click="vm.navigateToProject(project.id)">Evaluar</div>
+		    		<div style="outline:none" ng-if="vm.hasAuthority('ROLE_REFERRE') && vm.projectStatus(project) == 'PreSelected' && project.hasEvaluated"><span class="label label-primary">Evaluado</span></div>
+		    		<div style="outline:none" ng-if="vm.hasAnyAuthority(['ROLE_ADMIN','ROLE_USER'])" ng-click="vm.navigateToProject(project.id)">Detalles</div>
+		    	</td>   	
 		    	<td ng-if="vm.hasAuthority('ROLE_ADMIN')"><div evaluation-chart="project"></div></td>
 		  	</tr>
 	  	</tbody>
 	</table>
+	<div class="text-center" ng-if="vm.filterdProjects.length > vm.itemsPerPage">
+		<ul uib-pagination boundary-links="true" total-items="vm.filterdProjects.length" items-per-page="vm.itemsPerPage" ng-model="vm.currentPage" ng-change="vm.changePage()" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+	</div>
 </div>

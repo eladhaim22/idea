@@ -1,6 +1,13 @@
 <div ng-cloak>
-    <div class="row" style="margin-bottom:5px;" ng-repeat="ranking in vm.ranking">
+	<div class="row" style="margin-bottom:5px;" ng-repeat="ranking in vm.ranking">
     	<div class="col-md-4">{{ranking.project.title}}</div>
-    	<div class="col-md-8"><div class="btn btn-primary" ng-style="{'width':ranking.average * 10 + '%'}">{{ranking.average}}</div></div>
+    	<div class="col-md-8">
+    		<div class="progress">
+				<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="{'width':ranking.average * 10 + '%'}">
+	    			<span>{{ranking.average}}</span>
+	  			</div>
+			</div>
+    	</div>
     </div>
 </div>
+

@@ -1,25 +1,33 @@
 <div ng-cloak>
-    <div class="row">
-    	<form name="form" show-validation="nestedForm">
+    <div class="row project">
+    	<form name="form" show-validation>
     		<div class="form-group">
+    			<label class="control-label" for="title">Titulo</label>
     			<input type="text" class="form-control" name="title" placeholder="Ingrese el titulo" ng-model="vm.project.title" ng-disabled="vm.edit" required>
     			<span class="help-block" ng-show="form.title.$error.required && !form.title.$pristine">El titulo es obligatrio</span>
     		</div>
     		<div>
-  				<button ng-if="!vm.edit" class="btn btn-primary pull-right" type="button" ng-if="!vm.edit" ng-click="vm.OpenAddPersonModal()">Agregar integrante</button>
+  				<button ng-if="!vm.edit" class="btn btn-primary pull-right" type="button" ng-if="!vm.edit" ng-click="vm.addTeam()">Agregar integrantes</button>
   			</div>
+   			<div class="form-group" ng-if="vm.getActiveStatus() == 'Rejected'">
+   				<label class="control-label">Razon de rechazo</label>
+   				<textarea class="form-control no-resize" ng-model="vm.project.comment" ng-disabled="vm.edit"></textarea>		
+   			</div>
     		<div ng-if="vm.project.team.length > 0">
-    			<h2>Grupo</h2>
+    			<h4>Integrantes</h4>
 	    		<div ng-repeat="p in vm.project.team" class="team-part">
 	    			<div class="form-group">	
 	    			<div class="row">
 		    			<div class="col-md-4">
+		    				<label class="control-label">Nombre</label>
 		    				<input type="text" class="form-control" placeholder="Nombre" ng-model="p.firstName" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-4">
+		    				<label class="control-label">Apellido</label>
 		    				<input type="text" class="form-control" placeholder="Apellido"ng-model="p.lastName" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-3">
+		    				<label class="control-label">DNI</label>
 		    				<input type="text" class="form-control" placeholder="DNI" ng-model="p.dni" ng-disabled="true">
 		    			</div>
 	    			</div>
@@ -27,12 +35,15 @@
 	    		<div class="form-group" ng-if="p.type === 'personUade'">	
 	    			<div class="row">
 		    			<div class="col-md-4">
+		    				<label class="control-label">Carrera</label>
 		    				<input type="text" class="form-control" placeholder="Carrera" ng-model="p.career" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-4">
-		    				<input type="text" class="form-control" placeholder="FileNumber" ng-model="p.fileNumber" ng-disabled="true">
+		    				<label class="control-label">Legajo</label>
+		    				<input type="text" class="form-control" placeholder="Legajo" ng-model="p.fileNumber" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-3">
+		    				<label class="control-label">Avance de carrera</label>
 			    			<select class="form-control col-md-6" name="stage" ng-model="p.stage" ng-disabled="true"
 			    			 ng-options="vm.stages.indexOf(stage) as stage for stage in vm.stages" name="stageSelect" required>
 			    			 	<option value="">Eliga una etapa</option> 
@@ -43,12 +54,15 @@
 	    		<div class="form-group">	
 	    			<div class="row">
 		    			<div class="col-md-4">
+		    				<label class="control-label">Eded</label>
 		    				<input type="text" class="form-control" placeholder="Eded" ng-model="p.age" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-4">
+		    				<label class="control-label">Telefono</label>
 		    				<input type="text" class="form-control" placeholder="Telefono" ng-model="p.phoneNumber" ng-disabled="true">
 		    			</div>
 		    			<div class="col-md-3">
+		    				<label class="control-label">Email</label>
 		    				<input type="text" class="form-control" placeholder="Email" ng-model="p.email" ng-disabled="true">	
 		    			</div>
 		    			<div>
@@ -62,18 +76,18 @@
     			<div ng-if="section[0][0].section" class="section">{{section[0][0].section}}</div>
     			<div ng-repeat="subsection in section">
     				<div ng-if="subsection[0].subsection" class="subsection">{{subsection[0].subsection}}</div>
-    					<div ng-repeat="question in subsection">
-    						{{question.detail}}
-    						<div class="form-group">
-    							<textarea ng-if="vm.calculateAnswerIndex(question.id) == 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" ng-maxlength="140" required></textarea>
-    							<textarea ng-if="vm.calculateAnswerIndex(question.id) != 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" required></textarea>
-    							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$error.required && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine">La respuesta es obligatoria</span>
-    							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$invalid && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine && vm.calculateAnswerIndex(question.id) == 0">La respuesta debe tener como maximo 140 caracteres</span>
-    						</div>
-    					</div>
-    				</div>
-    			</div>
-    		<span class="help-block" ng-show="vm.teamError">Debe haber al menos una persona en el groupo</span>
+   					<div ng-repeat="question in subsection">
+   						<div class="form-group">
+   							<label class="control-label">{{question.detail}}</label>
+   							<textarea ng-if="vm.calculateAnswerIndex(question.id) == 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" ng-maxlength="140" required></textarea>
+   							<textarea ng-if="vm.calculateAnswerIndex(question.id) != 0" name="{{'ansewer' + vm.calculateAnswerIndex(question.id)}}" ng-init="answerIndex = vm.calculateAnswerIndex(question.id)" class="form-control no-resize" ng-model="vm.project.answers[answerIndex].questionAnswer" ng-disabled="vm.edit" required></textarea>
+   							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$error.required && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine">La respuesta es obligatoria</span>
+   							<span class="help-block" ng-show="form['ansewer' + vm.calculateAnswerIndex(question.id)].$invalid && !form['ansewer' + vm.calculateAnswerIndex(question.id)].$pristine && vm.calculateAnswerIndex(question.id) == 0">La respuesta debe tener como maximo 140 caracteres</span>
+   						</div>
+   					</div>
+   				</div>
+   			</div>
+    		<div ng-if="vm.teamError" class="alert alert-danger">Debe haber al menos una persona en el groupo</div>
     		
     		<div ng-if="!vm.edit" style="margin-top:10px;" class="pull-right">
     			<button type="button"  class="btn btn-primary" ng-click="vm.save()">Postular</button>

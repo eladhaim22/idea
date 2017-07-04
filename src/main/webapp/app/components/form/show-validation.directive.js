@@ -15,11 +15,13 @@
         return directive;
 
         function linkFunc (scope, element, attrs, formCtrl) {
-        	scope.$watch(function(){return element.find('input[ng-model],textarea[ng-model],select[ng-model]').length},function(newValue,oldValue){
-	            if(newValue != oldValue){
+        	var hasRenderd = false;
+        	scope.$watch(function(){return element.find('input[ng-model][name],textarea[ng-model][name],select[ng-model][name]').length},function(newValue,oldValue){
+	            if(newValue != oldValue || !hasRenderd){
+	            	hasRenderd = true;
 	        		element.find('.form-group').each(function() {
 		                var $formGroup = angular.element(this);
-		                var $inputs = $formGroup.find('input[ng-model],textarea[ng-model],select[ng-model]');
+		                var $inputs = $formGroup.find('input[ng-model][name],textarea[ng-model][name],select[ng-model][name]');
 		                if ($inputs.length > 0) {
 		                    $inputs.each(function() {
 		                        var $input = angular.element(this);

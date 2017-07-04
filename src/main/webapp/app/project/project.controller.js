@@ -3,7 +3,7 @@
 
     angular
         .module('ideaApp')
-        .controller('ProjectController', ProjectController).controller('AddPersonModelController',AddPersonModelController);
+        .controller('ProjectController', ProjectController).controller('AddPersonModelController',AddPersonModelController).controller('ReferreModelController',ReferreModelController);
 
     ProjectController.$inject = ['$scope', '$state','projectService','User','$uibModal','templateService','$q'];
 
@@ -47,8 +47,8 @@
     	
     	vm.changeState = function (state){
     		if(state == 'PreSelected'){
-	    		openModal().result.then(function (project) {
-		        	projectService.changeState(project.id,project.usersIds,_.indexOf(states,state)).then(function(data){
+    			openReferreModal().result.then(function (project) {
+		        	projectService.changeState(project.id,project.usersIds,_.indexOf(states,state),null).then(function(data){
 		        		$state.go('projects');
 		        	},function(error){
 		        		console.log('error');
@@ -59,8 +59,7 @@
     		}
     		else if(state == 'Rejected'){
     			rejectModal().result.then(function(comment){
-    				vm.project.comment = comment;
-    				projectService.changeState(vm.project.id,null,_.indexOf(states,state)).then(function(data){
+    				projectService.changeState(vm.project.id,null,_.indexOf(states,state),comment).then(function(data){
     	        		$state.go('projects');
     	        	},function(error){
     	        		console.log('error');
@@ -71,6 +70,17 @@
     		}
     	}
     	
+    	vm.getActiveStatus = function(){
+    		return _.filter(vm.project.states,function(state){return state.active == 1})[0].status;
+    	}
+    	
+    	vm.addTeam = function(){
+    		OpenAddPersonModal().result.then(function(team){
+    			vm.project.team = team;
+    		},function(error){
+    			console.log(error);
+    		});
+    	}
     	
     	vm.getAnswerNode = function(questionId){
     		return _.filter(vm.project.answers,function(answer){
@@ -106,6 +116,9 @@
         		if(!vm.project.team.length > 0){
         			vm.teamError = true;
         		}
+        		else{
+        			vm.teamError = false;
+        		}
         }
         
         vm.navigateToEvaluation = function(){
@@ -113,12 +126,13 @@
         }
         
         
-        vm.OpenAddPersonModal =  function(){
+        function OpenAddPersonModal(){
         	var scope = $scope.$new(true);
         	scope.team = vm.project.team ? angular.copy(vm.project.team) : [];
     		var modalInstance = $uibModal.open({
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
+            appendTo: $('.project').eq(0),
             scope:scope,
             backdrop: 'static',
             size:'lg',
@@ -126,7 +140,7 @@
             controller: 'AddPersonModelController',
             resolve: {
               team: function () {
-                return $scope.team;
+            	  return $scope.team;
               }
             }
           });
@@ -146,17 +160,15 @@
             controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){      
             	$scope.ok = function () {
             		$uibModalInstance.close($scope.comment);
-	            	scope.$destroy();
             	}
             	
             	$scope.cancel = function(){
-            		scope.$destroy();
             		$scope.$dismiss();
             	}
             }],
             resolve: {
-              project: function () {
-                return $scope.comment;
+              comment: function () {
+            	  return $scope.comment;
               }
             }
           });
@@ -164,7 +176,7 @@
         }
         
         
-        function openModal (){
+        function openReferreModal (){
         	var scope = $scope.$new(true);
         	scope.project = angular.copy(vm.project);
     		var modalInstance = $uibModal.open({
@@ -174,49 +186,7 @@
             backdrop: 'static',
             size:'lg',
             templateUrl: 'app/components/modal/projectReferreModal.html',
-            controller: ['$scope','User','$uibModalInstance', function($scope,User,$uibModalInstance){            	
-            	function initialize(){
-            		User.query({},function(data){
-            			$scope.users = _.filter(data, function(user){
-                    	    return _.find($scope.project.Users, function(userInProject){
-                    	        return userInProject.id !== user.id && _.contains(user.authorities,'ROLE_REFERRE');
-                    	    });
-            			});
-            		},function(error){
-            			
-            		});
-            	}
-            	
-            	$scope.isReferee = function(user){
-            		return _.contains(user.authorities,'ROLE_REFERRE');
-            	}
-            	
-            	$scope.deleteReferre = function(user,index){
-            		$scope.users.push($scope.project.Users.splice(index,1)[0]);
-            		$scope.project.usersIds = _.without($scope.project.usersIds,user.id);
-            	}
-            	
-            	$scope.addReferre = function(user,index){
-            		$scope.project.Users.push($scope.users.splice(index,1)[0]);
-            		$scope.project.usersIds.push(user.id);
-            	}
-            	
-            	$scope.ok = function () {
-            		if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
-	            		$uibModalInstance.close($scope.project);
-	            		scope.$destroy();
-            		}
-            		else
-            			$scope.raiseError = true;
-            	};
-            	
-            	$scope.cancel = function(){
-            		scope.$destroy();
-            		$scope.$dismiss();
-            	}
-
-            	initialize();
-            }],
+            controller: 'ReferreModelController',
             resolve: {
               project: function () {
                 return $scope.project;
@@ -226,43 +196,15 @@
     		return modalInstance;
         }
         
-        function rejectModal (){
-        	var scope = $scope.$new(true);
-        	scope.project = angular.copy(vm.project);
-    		var modalInstance = $uibModal.open({
-            ariaLabelledBy: 'modal-title',
-            ariaDescribedBy: 'modal-body',
-            scope:scope,
-            backdrop: 'static',
-            size:'lg',
-            templateUrl: 'app/components/modal/projectRejectModal.html',
-            controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){      
-            	$scope.ok = function () {
-            		$uibModalInstance.close($scope.comment);
-	            	scope.$destroy();
-            	}
-            	
-            	$scope.cancel = function(){
-            		scope.$destroy();
-            		$scope.$dismiss();
-            	}
-            }],
-            resolve: {
-              project: function () {
-                return $scope.comment;
-              }
-            }
-          });
-    		return modalInstance;
-        }
-        
         intialize(); 
     }
 
-
+    //Add person modal
+    
     AddPersonModelController.$inject = ['$scope','$uibModalInstance'];
 	function AddPersonModelController($scope,$uibModalInstance){            	
 		$scope.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
+		$scope.person = {};
 		$scope.addPersonToProject = function(){
 	    	if(personIsValid()){
 	        	$scope.team.push($scope.person);
@@ -296,7 +238,7 @@
 	    			invalid = true;
 	    		}
 	    		if(($scope.person.type == 'personUade') && (!$scope.personForm.fileNumber.$valid || !$scope.personForm.career.$valid ||
-	    				vm.person.stage == undefined)){
+	    				$scope.person.stage == undefined)){
 	    			$scope.personForm.fileNumber.$setDirty();
 	    			$scope.personForm.career.$setDirty();
 	    			$scope.personForm.stage.$setDirty();
@@ -310,19 +252,67 @@
 	    	}
 	    }
 	    
+	    $scope.removePerson = function(index){
+	    	$scope.team.splice(index,1);
+	    }
+	    
 	    $scope.ok = function () {
-			if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
+	    	if($scope.team.length > 0){
 	    		$uibModalInstance.close($scope.team);
-	    		scope.$destroy();
 			}
 			else
 				$scope.raiseError = true;
 		};
 		
 		$scope.cancel = function(){
-			scope.$destroy();
 			$scope.$dismiss();
 		}
 		
 	}
+	
+	//Add referre modal
+	
+	ReferreModelController.$inject = ['$scope','User','$uibModalInstance'];
+	function ReferreModelController($scope,User,$uibModalInstance){            	
+    	function initialize(){
+    		User.query({},function(data){
+    			$scope.users = _.filter(data, function(user){
+            	    return _.find($scope.project.Users, function(userInProject){
+            	        return userInProject.id !== user.id && _.contains(user.authorities,'ROLE_REFERRE');
+            	    });
+    			});
+    		},function(error){
+    			
+    		});
+    	}
+    	
+    	$scope.isReferee = function(user){
+    		return _.contains(user.authorities,'ROLE_REFERRE');
+    	}
+    	
+    	$scope.deleteReferre = function(user,index){
+    		$scope.users.push($scope.project.Users.splice(index,1)[0]);
+    		$scope.project.usersIds = _.without($scope.project.usersIds,user.id);
+    	}
+    	
+    	$scope.addReferre = function(user,index){
+    		$scope.project.Users.push($scope.users.splice(index,1)[0]);
+    		$scope.project.usersIds.push(user.id);
+    	}
+    	
+    	$scope.ok = function () {
+    		if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
+        		$uibModalInstance.close($scope.project);
+    		}
+    		else
+    			$scope.raiseError = true;
+    	};
+    	
+    	$scope.cancel = function(){
+    		$scope.$dismiss();
+    	}
+
+    	initialize();
+    }
+    
 })();

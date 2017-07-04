@@ -8,6 +8,7 @@
 		  		<th>Fecha de fin</th> 
 		  		<th>Action</th>
 		  		<th>Estado</th> 
+		  		<th>Cambiar Estado</th>
 		  	</tr> 
 		 </thead>
 		 <tbody>
@@ -18,7 +19,10 @@
 		    	<td ng-click="vm.navigateToPeriod(period.id)">Ver Detalle</td>
 		    	<td ng-if="period.active"><span class="label label-primary">Activo</span></td>
 				<td ng-if="!period.active"><span class="label label-danger">No Activo</span></td>
+				<td ng-if="period.active" class="btn btn-danger" ng-click="vm.deactivatePeriod(period.id)" style="width:100%">Desactivar</span></td>
+				<td ng-if="!period.active" class="btn btn-primary" style="width:100%" ng-click="vm.activatePeriod(period.id)">Activar</span></td>
 		  	</tr>
 	  	</tbody>
 	</table>
+	<div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
 </div>

@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.hibernate.service.spi.ServiceException;
 import org.mapstruct.factory.Mappers;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -56,13 +57,27 @@ public class PeriodService {
     private PeriodMapper periodMapper;
     
     public void CreatePeriod(PeriodDTO periodDTO){
+    	Period period = periodMapper.ToModel(periodDTO);
+    	period.setActive(false);
+    	periodRepository.save(period);
+    }
+    
+    public void ActivatePeriod(Long periodId){
     	Period previousPeriod = new Period();
     	previousPeriod = periodRepository.findOneByActiveIsTrue();
     	if(previousPeriod != null){
-    		previousPeriod.setActive(false);
+    		throw new ServiceException("Debe cerrar el periodo anterior antes de activar otro");
     	}
-    	Period period = periodMapper.ToModel(periodDTO);
-    	period.setActive(true);
+    	else{
+    		Period period = periodRepository.getOne(periodId);
+    		period.setActive(true);
+    		periodRepository.save(period);
+    	}	
+    }
+    
+    public void DeactivatePeriod(Long periodId){
+    	Period period = periodRepository.getOne(periodId);
+    	period.setActive(false);
     	periodRepository.save(period);
     }
     

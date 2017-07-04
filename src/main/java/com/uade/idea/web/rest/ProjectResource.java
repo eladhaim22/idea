@@ -105,6 +105,7 @@ public class ProjectResource {
         	s.setActive(true);
         	s.setStatus(Status.Rejected);
         	projectDto.getStates().add(s);
+        	projectDto.setComment(projectIdAndListOfUsers.getComment());
         	projectService.SaveProject(projectDto);
         }
         

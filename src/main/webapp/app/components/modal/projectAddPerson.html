@@ -5,22 +5,28 @@
 	 <div class="container-fluid">
  		<form name="personForm" show-validation>
 	 		<div class="row">
-	 			<div class="col-md-8">
-		 			<div class="form-group">
-			 			<div class="row">
+	 			<div class="row">
+	 				<div class="col-md-8">
+		 				<div class="form-group">	 			
 		 					<div class="col-md-2">
 			 					<input type="radio" name="Type" value="uade" ng-model="personType" ng-change="person.type = 'personUade'" ng-required="true">Uade<br>
 							</div>
 							<div class="col-md-2">
 								<input type="radio" name="Type" value="extern" ng-model="personType" ng-change="person.type = 'person'" ng-required="true">Externo<br>
 			 				</div>
-			 			</div>
-			 			<div class="row">
-				  			<div class="col-md-12">
+			 				<div class="col-md-12">
 				 				<span class="help-block" ng-show="personForm.Type.$error.required && !personForm.Type.$pristine">Debe elegir tipo de persona</span>
-				 			</div>
-						</div>
+				 			</div>		
+				 		</div>
 			 		</div>
+			 		<div class="col-md-4">	 				
+	 					<div class="form-group">
+	 						<div style="text-align:center">Integrantes</div>
+	 					</div>
+	 				</div>
+			 	</div>
+	 			<div class="col-md-8">
+		 			
 		 			<div class="row">
 			  			<div class="col-md-6">
 			  				<div class="form-group">	
@@ -83,7 +89,7 @@
 			  					<input type="text" name="fileNumber" class="form-control" placeholder="FileNumber" ng-model="person.fileNumber" required>
 			  					<span class="help-block" ng-show="personForm.fileNumber.$error.required && !personForm.fileNumber.$pristine">El legajo es obligatrio</span>
 			  				</div>
-			  			</div>
+			  			</div> 
 			  			<div class="col-md-6">
 				   			<div class="form-group">
 				   				<select class="form-control col-md-6" name="stage" ng-model="person.stage" ng-init="person.stage = stages[0].value" 
@@ -99,15 +105,15 @@
 			 		</div>
 		 		</div>
 	 			<div class="col-md-4">
-	 				<div class="row"> 
+	 				<div class="row" ng-repeat="person in team">
 	 					<div class="form-group">
-	 						<div style="text-align:center">Integrantes</div>
+	 						<button class="btn btn-primary" style="width:100%" ng-click="removePerson($index)">{{person.firstName + person.lastName}}<i class="glyphicon glyphicon-remove pull-right"></i></span>
 	 					</div>
 	 				</div>
-	 				<div class="row" ng-repeat="person in team">
-	 					<div class="btn btn-defalut" style="width:100%">{{person.firstName + ' ' + person.lastName}}</div>
-	 				</div>
 	 			</div>
+	 			<div class="col-md-12">
+					<div ng-if="raiseError" class="alert alert-danger">Debe agregar al menos un integrante</div>
+				</div>
 	 		</div>
  		</form>
  </div>

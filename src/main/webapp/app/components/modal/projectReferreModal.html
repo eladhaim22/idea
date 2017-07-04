@@ -2,24 +2,26 @@
  	<h3 class="modal-title" id="modal-title">Agregar jurados al proyecto</h3>
 </div>
 <div class="modal-body" id="modal-body">
-	 <div class="container-fluid">
-	<div class="row">
-	<div class="col-md-6"> 
-	<div class="list-group list--group-scroll">
-		<a ng-repeat="userInProject in project.Users" class="list-group-item">{{userInProject.firstName + ' ' + userInProject.lastName}}
-		<span ng-if="isReferee(userInProject)" ng-click="deleteReferre(userInProject,$index)"><i class="glyphicon glyphicon-minus pull-right"></i></span></a>
-	</div>
-	</div>
-	<div class="col-md-6"> 
-	<div class="list-group list--group-scroll">
-		<a ng-repeat="user in users" class="list-group-item">{{user.firstName + ' ' + user.lastName}}
-		<span ng-click="addReferre(user,$index)"><i class="glyphicon glyphicon-plus pull-right"></i></span></a>
-	</div>
-	</div>
-	<div class="col-md-12">
-		<div ng-if="raiseError" class="alert alert-danger">Debe elejir al menos un referre</div>
-	</div>
-	</div>
+ 	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6"> 
+				<div class="list-group list--group-scroll">
+					<a ng-repeat="userInProject in project.Users" class="list-group-item">{{userInProject.firstName + ' ' + userInProject.lastName}}
+					<span ng-if="isReferee(userInProject)" ng-click="deleteReferre(userInProject,$index)"><i class="glyphicon glyphicon-minus pull-right"></i></span></a>
+				</div>
+			</div>
+			<div class="col-md-6"> 
+				<div class="list-group list--group-scroll">
+					<a ng-repeat="user in users" class="list-group-item">{{user.firstName + ' ' + user.lastName}}
+					<span ng-click="addReferre(user,$index)"><i class="glyphicon glyphicon-plus pull-right"></i></span></a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div ng-if="raiseError" class="alert alert-danger">Debe elejir al menos un referre</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div class="modal-footer">

@@ -15,10 +15,13 @@ import com.uade.idea.service.dto.ProjectIdAndListOfReferres;
 import com.uade.idea.service.dto.StateDTO;
 import com.uade.idea.service.dto.TemplateDTO;
 import com.uade.idea.service.dto.UserDTO;
+import com.uade.idea.web.rest.util.ApiError;
 import com.uade.idea.web.rest.util.HeaderUtil;
 
+import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -73,17 +76,40 @@ public class PeriodResource {
     @PostMapping("/")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity CreatePeriod(@RequestBody PeriodDTO periodDto) throws URISyntaxException {
-        try{
-    	log.debug("REST request to save period and turn it active:");
+    public ResponseEntity CreatePeriod(@RequestBody PeriodDTO periodDto) throws URISyntaxException {  
+    	log.debug("REST request to save period");
         periodService.CreatePeriod(periodDto);
         return ResponseEntity.created(new URI("/api/period/"))
                 .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
+    }
+    
+    
+    @GetMapping("/Activate/{id}")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity ActivatePeriod(@PathVariable("id") String id) throws URISyntaxException {  
+    	log.debug("REST request to active period {}:",id);
+        try{
+	    	periodService.ActivatePeriod(Long.parseLong(id));
+	        return ResponseEntity.created(new URI("/api/period/"))
+	                .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
         }
         catch(Exception ex){
-        	return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+        	 ApiError apiError = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(),"sfasdfasdf");
+        	return new ResponseEntity<Object>(apiError,new HttpHeaders(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/Deactivate/{id}")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity DeactivatePeriod(@PathVariable("id") String id) throws URISyntaxException {  
+    	log.debug("REST request to deactivate period {}:",id);
+        periodService.DeactivatePeriod(Long.parseLong(id));
+        return ResponseEntity.created(new URI("/api/period/"))
+                .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
+    }
+    
     
     @GetMapping("/{id}")
     @Timed

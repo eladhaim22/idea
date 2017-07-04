@@ -9,6 +9,7 @@ import com.uade.idea.domain.Status;
 public class ProjectIdAndListOfReferres
 {
 	private Long projectId;
+	private String comment;
 	private Set<Long> users;
 	private Status status;
 	
@@ -35,5 +36,13 @@ public class ProjectIdAndListOfReferres
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }
