@@ -72,7 +72,6 @@ public class PeriodResource {
     	this.periodService = periodService;
     }
     
-    
     @PostMapping("/")
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
@@ -82,7 +81,6 @@ public class PeriodResource {
         return ResponseEntity.created(new URI("/api/period/"))
                 .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
     }
-    
     
     @GetMapping("/Activate/{id}")
     @Timed
@@ -109,7 +107,6 @@ public class PeriodResource {
         return ResponseEntity.created(new URI("/api/period/"))
                 .headers(HeaderUtil.createAlert( "el periodo se creo",null)).build();
     }
-    
     
     @GetMapping("/{id}")
     @Timed
@@ -138,5 +135,4 @@ public class PeriodResource {
          	return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
          }
     } 
-    
 }

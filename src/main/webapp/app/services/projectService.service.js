@@ -5,7 +5,7 @@
 		var projectService = entityServiceFactory.create('project');
 		
 		var statusSpanish = {
-				'Inicial':'Iniciado',
+				'Initial':'Iniciado',
 				'PreSelected':'Pré-Selecionado',
 				'Rejected':'Rechazado',
 				'FinalStage':'Etapa Final'

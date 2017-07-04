@@ -99,4 +99,10 @@ public class MailService {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
     }
+   
+    @Async
+    public void sendReferreEmail(User user) {
+        log.debug("Sending referre email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "newProjectAssigned", "email.assign.title");
+    }
 }

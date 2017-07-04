@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.uade.idea.domain.Status;
 import com.uade.idea.security.AuthoritiesConstants;
+import com.uade.idea.service.MailService;
 import com.uade.idea.service.ProjectService;
 import com.uade.idea.service.UserService;
 import com.uade.idea.service.dto.ProjectDTO;
@@ -64,6 +65,9 @@ public class ProjectResource {
     
     private final UserService userService;
     
+    
+   
+    
     public ProjectResource(ProjectService projectService,UserService userService) {
     	this.projectService = projectService;
     	this.userService = userService;
@@ -97,6 +101,7 @@ public class ProjectResource {
         	s.setStatus(Status.PreSelected);
         	projectDto.getStates().add(s);
         	projectDto.setUsersIds(projectIdAndListOfUsers.getUsers());
+        	projectService.SendMailToReferres(projectIdAndListOfUsers.getUsers());
         	projectService.SaveProject(projectDto);
         }
         else if(projectDto.getStates().stream().anyMatch(projectState -> projectState.isActive() && projectState.getStatus() == Status.Initial && projectIdAndListOfUsers.getStatus().equals(Status.Rejected))){

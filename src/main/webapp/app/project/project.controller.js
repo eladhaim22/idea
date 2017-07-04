@@ -71,7 +71,9 @@
     	}
     	
     	vm.getActiveStatus = function(){
-    		return _.filter(vm.project.states,function(state){return state.active == 1})[0].status;
+    		if(vm.project.states){
+    			return _.filter(vm.project.states,function(state){return state.active == 1})[0].status;
+    		}
     	}
     	
     	vm.addTeam = function(){
@@ -277,7 +279,7 @@
     	function initialize(){
     		User.query({},function(data){
     			$scope.users = _.filter(data, function(user){
-            	    return _.find($scope.project.Users, function(userInProject){
+            	    return _.find($scope.$parent.project.Users, function(userInProject){
             	        return userInProject.id !== user.id && _.contains(user.authorities,'ROLE_REFERRE');
             	    });
     			});

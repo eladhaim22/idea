@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -26,8 +27,9 @@ import com.uade.idea.domain.Project;
 import com.uade.idea.domain.Status;
 import com.uade.idea.domain.User;
 import com.uade.idea.repository.PeriodRepository;
+import com.uade.idea.repository.PersonRepository;
 import com.uade.idea.repository.ProjectRepository;
-
+import com.uade.idea.repository.UserRepository;
 import com.uade.idea.security.AuthoritiesConstants;
 import com.uade.idea.service.dto.ProjectDTO;
 import com.uade.idea.service.dto.RankingDTO;
@@ -50,6 +52,9 @@ public class ProjectService {
     private ProjectRepository projectRepository;
     
     @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
     private ProjectMapper projectMapper;
     
     @Autowired
@@ -66,6 +71,13 @@ public class ProjectService {
  
     @Autowired
     private HttpServletRequest request;
+    
+    private final MailService mailService;
+    
+    public ProjectService(MailService mailService){
+    	this.mailService = mailService;
+    }
+    
     
     private Session getSession(){
     	return  this.entityManager.unwrap(Session.class);
@@ -162,5 +174,10 @@ public class ProjectService {
 			return;
 		}
     	this.getSession().enableFilter("getProjectsOfActivePeriod");
+    }
+    
+    public void SendMailToReferres(Set<Long> usersIds){
+    	List<User> users = userRepository.findByIdIn(usersIds.stream().collect(Collectors.toList()));
+    	users.stream().forEach(user -> this.mailService.sendReferreEmail(user));
     }
 }
