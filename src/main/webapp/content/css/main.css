@@ -349,8 +349,7 @@ ui bootstrap tweaks
 	font-size:16px;
 }
 
-.error-validation{
-	color:red;
-	display:block;
+.help-block{
+	margin:0px;
 }
-/* jhipster-needle-css-add-main JHipster will add new css style */
+

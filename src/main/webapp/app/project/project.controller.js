@@ -3,7 +3,7 @@
 
     angular
         .module('ideaApp')
-        .controller('ProjectController', ProjectController);
+        .controller('ProjectController', ProjectController).controller('AddPersonModelController',AddPersonModelController);
 
     ProjectController.$inject = ['$scope', '$state','projectService','User','$uibModal','templateService','$q'];
 
@@ -123,70 +123,7 @@
             backdrop: 'static',
             size:'lg',
             templateUrl: 'app/components/modal/projectAddPerson.html',
-            controller: ['$scope','$uibModalInstance', function($scope,$uibModalInstance){            	
-            	$scope.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
-            	$scope.addPersonToProject = function(){
-                	if(personIsValid()){
-        	        	$scope.team.push($scope.person);
-        	        	$scope.person = {};
-        	        	$scope.personType = undefined;
-        	        	setPersonInputsPristine();
-                	}
-                }
-                
-                function setPersonInputsPristine(){
-                	$scope.personForm.Type.$setPristine();
-                	$scope.personForm.firstName.$setPristine();
-        			$scope.personForm.lastName.$setPristine();
-        			$scope.personForm.dni.$setPristine();
-        			$scope.personForm.age.$setPristine();
-        			$scope.personForm.phoneNumber.$setPristine();
-        			$scope.personForm.email.$setPristine();
-                }
-                
-                function personIsValid(){
-                	if($scope.person.type){
-                		var invalid = false;
-                		if(!$scope.personForm.firstName.$valid || !$scope.personForm.lastName.$valid || !$scope.personForm.dni.$valid ||
-                				!$scope.personForm.email.$valid || !$scope.personForm.phoneNumber.$valid || !$scope.personForm.age.$valid){
-                			$scope.personForm.firstName.$setDirty();
-                			$scope.personForm.lastName.$setDirty();
-                			$scope.personForm.dni.$setDirty();
-                			$scope.personForm.age.$setDirty();
-                			$scope.personForm.phoneNumber.$setDirty();
-                			$scope.personForm.email.$setDirty();
-                			invalid = true;
-                		}
-                		if((vm.person.type == 'personUade') && (!$scope.personForm.fileNumber.$valid || !$scope.personForm.career.$valid ||
-                				vm.person.stage == undefined)){
-                			$scope.personForm.fileNumber.$setDirty();
-                			$scope.personForm.career.$setDirty();
-                			$scope.personForm.stage.$setTouched();
-                			return false;
-                		}
-                		return !invalid ? true : false; 
-                	}
-                	else {
-                		$scope.personForm.Type.$setDirty();
-                		return false;
-                	}
-                }
-                
-                $scope.ok = function () {
-            		if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
-	            		$uibModalInstance.close($scope.team);
-	            		scope.$destroy();
-            		}
-            		else
-            			$scope.raiseError = true;
-            	};
-            	
-            	$scope.cancel = function(){
-            		scope.$destroy();
-            		$scope.$dismiss();
-            	}
-            	
-            }],
+            controller: 'AddPersonModelController',
             resolve: {
               team: function () {
                 return $scope.team;
@@ -321,4 +258,71 @@
         
         intialize(); 
     }
+
+
+    AddPersonModelController.$inject = ['$scope','$uibModalInstance'];
+	function AddPersonModelController($scope,$uibModalInstance){            	
+		$scope.stages = ['1er año','2do año','3er año','4to año','5to año','Graduado','Post Grado'];
+		$scope.addPersonToProject = function(){
+	    	if(personIsValid()){
+	        	$scope.team.push($scope.person);
+	        	$scope.person = {};
+	        	$scope.personType = undefined;
+	        	setPersonInputsPristine();
+	    	}
+	    }
+	    
+	    function setPersonInputsPristine(){
+	    	$scope.personForm.Type.$setPristine();
+	    	$scope.personForm.firstName.$setPristine();
+			$scope.personForm.lastName.$setPristine();
+			$scope.personForm.dni.$setPristine();
+			$scope.personForm.age.$setPristine();
+			$scope.personForm.phoneNumber.$setPristine();
+			$scope.personForm.email.$setPristine();
+	    }
+	    
+	    function personIsValid(){
+	    	if($scope.person.type){
+	    		var invalid = false;
+	    		if(!$scope.personForm.firstName.$valid || !$scope.personForm.lastName.$valid || !$scope.personForm.dni.$valid ||
+	    				!$scope.personForm.email.$valid || !$scope.personForm.phoneNumber.$valid || !$scope.personForm.age.$valid){
+	    			$scope.personForm.firstName.$setDirty();
+	    			$scope.personForm.lastName.$setDirty();
+	    			$scope.personForm.dni.$setDirty();
+	    			$scope.personForm.age.$setDirty();
+	    			$scope.personForm.phoneNumber.$setDirty();
+	    			$scope.personForm.email.$setDirty();
+	    			invalid = true;
+	    		}
+	    		if(($scope.person.type == 'personUade') && (!$scope.personForm.fileNumber.$valid || !$scope.personForm.career.$valid ||
+	    				vm.person.stage == undefined)){
+	    			$scope.personForm.fileNumber.$setDirty();
+	    			$scope.personForm.career.$setDirty();
+	    			$scope.personForm.stage.$setDirty();
+	    			return false;
+	    		}
+	    		return !invalid ? true : false; 
+	    	}
+	    	else {
+	    		$scope.personForm.Type.$setDirty();
+	    		return false;
+	    	}
+	    }
+	    
+	    $scope.ok = function () {
+			if(_.some($scope.project.Users,function(user){return _.contains(user.authorities,'ROLE_REFERRE')})){
+	    		$uibModalInstance.close($scope.team);
+	    		scope.$destroy();
+			}
+			else
+				$scope.raiseError = true;
+		};
+		
+		$scope.cancel = function(){
+			scope.$destroy();
+			$scope.$dismiss();
+		}
+		
+	}
 })();
