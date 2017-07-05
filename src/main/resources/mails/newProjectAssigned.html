@@ -9,10 +9,10 @@
         <p th:text="#{email.assign.greeting(${user.login})}"></p>
         <p th:text="#{email.assign.text1}"></p>
         <p>
-            <a th:href="@{|${baseUrl}/#/}" th:text="#{email.assign.text2}"></a>
+            <a th:href="${baseUrl}" th:text="#{email.assign.text2}"></a>
         </p>
         <p>
-            <span th:text="#{email.activation.text3}"></span>
+            <span th:text="#{email.assign.text3}"></span>
             <br/>
             <em th:text="#{email.signature}"></em>
         </p>

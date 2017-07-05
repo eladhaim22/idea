@@ -2,9 +2,14 @@
     'use strict';
 
     angular.module('ideaApp')
-    .config(stateConfig);
+    .config(stateConfig);//.config(translateConfig);
 
     stateConfig.$inject = ['$stateProvider'];
+    /*translateConfig.$inject = ['$translateProvider'];
+    
+    function translateConfig($translateProvider){
+    	$translateProvider.preferredLanguage('es');
+    }*/
 
     function stateConfig($stateProvider) {
         $stateProvider.state('app', {

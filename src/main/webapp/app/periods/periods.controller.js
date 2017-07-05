@@ -10,10 +10,12 @@
     function PeriodsController ($scope,$state,periodService) {
     	var vm = this;
     	vm.error = undefined;
-    	
+    	vm.periods = [];
     	function intialize(){
     		periodService.getAll().then(function(periods){
-    			vm.periods = _.sortBy(periods,'startingDate');
+    			if(periods){
+    				vm.periods = _.sortBy(periods,'startingDate');
+    			}
     		},function(error){
     			
     		});

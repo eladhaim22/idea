@@ -68,13 +68,13 @@
                         <li ui-sref-active="active" ng-switch-when="true">
                             <a ui-sref="settings" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-wrench"></span>&nbsp;
-                                <span>Ajustes</span>
+                                <span>Configuraciones</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-switch-when="true">
                             <a ui-sref="password" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-lock"></span>&nbsp;
-                                <span>Clave</span>
+                                <span>Contraseña</span>
                             </a>
                         </li>
                         <li has-authority="ROLE_ADMIN" ui-sref-active="active">
@@ -92,19 +92,19 @@
                         <li ui-sref-active="active" ng-switch-when="true">
                             <a href="" ng-click="vm.logout()" id="logout">
                                 <span class="glyphicon glyphicon-log-out"></span>&nbsp;
-                                <span>Sign out</span>
+                                <span>Salir</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-switch-when="false">
                             <a href="" ng-click="vm.login()" id="login">
                                 <span class="glyphicon glyphicon-log-in"></span>&nbsp;
-                                <span>Sign in</span>
+                                <span>Iniciar sessión</span>
                             </a>
                         </li>
                         <li ui-sref-active="active" ng-switch-when="false">
                             <a ui-sref="register" ng-click="vm.collapseNavbar()">
                                 <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
-                                <span>Inscribir</span>
+                                <span>Registrate</span>
                             </a>
                         </li>
                     </ul>
